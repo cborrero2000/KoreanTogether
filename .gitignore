@@ -1,0 +1,19 @@
+node_modules/
+.expo/
+dist/
+web-build/
+
+# Android generated — rebuild with: expo prebuild -p android
+android/
+
+# iOS generated — rebuild with: expo prebuild -p ios
+ios/
+
+# Local env files
+.env
+.env.local
+*.local
+
+# OS
+.DS_Store
+Thumbs.db
