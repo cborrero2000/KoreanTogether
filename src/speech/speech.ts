@@ -209,7 +209,15 @@ export function speak(text: string, opts?: SpeakOpts) {
 function speakWeb(text: string, opts?: SpeakOpts) {
   const synth = (globalThis as any).speechSynthesis as SpeechSynthesis | undefined;
   if (!synth) return;
+
+  // Cancel any current utterance first.
   synth.cancel();
+
+  // Chrome bug: cancel() can leave the engine in a paused state where
+  // subsequent speak() calls are silently queued but never played.
+  // Calling resume() un-pauses the engine before we queue the new utterance.
+  if (synth.paused) synth.resume();
+
   const u = new (globalThis as any).SpeechSynthesisUtterance(text) as SpeechSynthesisUtterance;
   const id = opts?.voiceId ?? resolveVoiceId(opts?.voice);
   const v = id ? webVoices.find((x) => x.voiceURI === id) : null;
@@ -219,27 +227,35 @@ function speakWeb(text: string, opts?: SpeakOpts) {
   } else {
     u.lang = LANG;
   }
-  u.rate = opts?.rate ?? 0.95; // close to natural; the "Slower" button passes a lower value
+  u.rate = opts?.rate ?? 0.95;
   u.pitch = pitchFor(opts?.voice, autoVoiceA === autoVoiceB || !!opts?.voiceId);
   if (opts?.onStart) u.onstart = opts.onStart;
   u.onend = () => opts?.onDone?.();
   u.onerror = () => opts?.onDone?.();
-  synth.speak(u);
+
+  // Small delay so the engine has a tick to settle after cancel/resume.
+  setTimeout(() => synth.speak(u), 50);
 }
 
 function speakNative(text: string, opts?: SpeakOpts) {
+  // Android's TTS engine is asynchronous — stop() signals it to halt but the
+  // engine takes a moment to fully reset. Calling speak() immediately after
+  // can fire before the engine is ready, causing silent failures on repeat
+  // presses. A short delay lets the engine complete its stop cycle first.
   Speech.stop();
   const id = opts?.voiceId ?? resolveVoiceId(opts?.voice);
-  Speech.speak(text, {
-    language: LANG,
-    voice: id ?? undefined,
-    rate: opts?.rate ?? 0.95,
-    pitch: pitchFor(opts?.voice, autoVoiceA === autoVoiceB || !!opts?.voiceId),
-    onStart: opts?.onStart,
-    onDone: opts?.onDone,
-    onStopped: opts?.onDone,
-    onError: opts?.onDone,
-  });
+  setTimeout(() => {
+    Speech.speak(text, {
+      language: LANG,
+      voice: id ?? undefined,
+      rate: opts?.rate ?? 0.95,
+      pitch: pitchFor(opts?.voice, autoVoiceA === autoVoiceB || !!opts?.voiceId),
+      onStart: opts?.onStart,
+      onDone: opts?.onDone,
+      onStopped: opts?.onDone,
+      onError: opts?.onDone,
+    });
+  }, 100);
 }
 
 export function stopSpeaking() {
