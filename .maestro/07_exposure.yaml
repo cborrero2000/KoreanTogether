@@ -1,0 +1,14 @@
+appId: com.cborrero.koreantogether
+---
+- launchApp
+- tapOn: "Exposure"
+- assertVisible: "Exposure"
+- assertVisible: "Play"
+- assertVisible: "Show mode"
+- tapOn: "Show mode"
+- assertVisible: "Listen mode"
+- tapOn: "Play"
+- assertVisible: "Pause"
+- tapOn: "Pause"
+- tapOn: "Menu"
+- assertVisible: "Korean"

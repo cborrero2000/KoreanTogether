@@ -1,8 +1,8 @@
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { colors, font, radius, spacing } from "../theme";
+import { colors, font, shape, spacing, MIN_TOUCH } from "../theme";
 
-/** Top bar for every activity: a big Back button, a title and progress. */
+/** Top bar for every activity: a big accessible Back button, title and progress bar. */
 export function ActivityHeader({
   title,
   onBack,
@@ -16,43 +16,78 @@ export function ActivityHeader({
 }) {
   return (
     <View>
-      <View style={styles.row}>
-        <Pressable onPress={onBack} style={({ pressed }) => [styles.back, pressed && { opacity: 0.8 }]}>
-          <Text style={styles.backText}>‹ 메뉴 Menu</Text>
+      <View style={s.row}>
+        <Pressable
+          onPress={onBack}
+          accessibilityRole="button"
+          accessibilityLabel="Back to menu"
+          style={({ pressed }) => [s.back, pressed && { opacity: 0.8 }]}
+        >
+          <Text style={s.backText}>‹ 메뉴 Menu</Text>
         </Pressable>
         {step != null && total != null && (
-          <Text style={styles.progress}>
+          <Text style={s.progress} accessibilityLabel={`Step ${step} of ${total}`}>
             {step} / {total}
           </Text>
         )}
       </View>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={s.title}>{title}</Text>
       {step != null && total != null && (
-        <View style={styles.barTrack}>
-          <View style={[styles.barFill, { width: `${(step / total) * 100}%` }]} />
+        <View
+          style={s.barTrack}
+          accessibilityRole="progressbar"
+          accessibilityValue={{ min: 0, max: total, now: step }}
+        >
+          <View style={[s.barFill, { width: `${(step / total) * 100}%` }]} />
         </View>
       )}
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  row: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: spacing.sm },
+const s = StyleSheet.create({
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: spacing.sm,
+  },
   back: {
-    backgroundColor: colors.neutralBtn,
+    backgroundColor: colors.surfaceVariant,
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
-    borderRadius: radius.pill,
+    borderRadius: shape.full,
+    minHeight: MIN_TOUCH,
+    minWidth: MIN_TOUCH,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  backText: { fontSize: font.label, fontWeight: "700", color: colors.text },
-  progress: { fontSize: font.label, fontWeight: "700", color: colors.textSoft },
-  title: { fontSize: font.title, fontWeight: "800", color: colors.text, marginTop: spacing.md },
+  backText: {
+    fontSize: font.labelLarge,
+    fontWeight: "700",
+    color: colors.onSurface,
+  },
+  progress: {
+    fontSize: font.labelLarge,
+    fontWeight: "700",
+    color: colors.onSurfaceVariant,
+  },
+  title: {
+    fontSize: font.headlineLarge,
+    fontWeight: "800",
+    color: colors.onBackground,
+    marginTop: spacing.md,
+  },
   barTrack: {
     height: 8,
-    backgroundColor: colors.neutralBtn,
-    borderRadius: radius.pill,
+    backgroundColor: colors.surfaceVariant,
+    borderRadius: shape.full,
     marginTop: spacing.sm,
     overflow: "hidden",
   },
-  barFill: { height: "100%", backgroundColor: colors.primary },
+  barFill: {
+    height: "100%",
+    backgroundColor: colors.primary,
+    borderRadius: shape.full,
+  },
 });

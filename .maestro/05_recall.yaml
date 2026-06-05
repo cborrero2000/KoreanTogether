@@ -1,0 +1,18 @@
+appId: com.cborrero.koreantogether
+---
+- launchApp
+- tapOn: "Recall"
+- assertVisible: "Recall"
+- assertVisible: "Active recall"
+- assertVisible: "Due now"
+- assertVisible: "Studied"
+- assertVisible: "Strong"
+- tapOn: "Review"
+- assertVisible: "Show answer"
+- tapOn: "Show answer"
+- assertVisible: "Again"
+- assertVisible: "Good"
+- assertVisible: "Easy"
+- tapOn: "Good"
+- tapOn: "Menu"
+- assertVisible: "Korean"

@@ -1,0 +1,11 @@
+appId: com.cborrero.koreantogether
+---
+- launchApp
+- tapOn: "Voice"
+- assertVisible: "Voice"
+- assertVisible: "Automatic"
+- assertVisible: "Hear a sample"
+- tapOn: "Automatic"
+- tapOn: "Hear a sample"
+- tapOn: "Menu"
+- assertVisible: "Korean"

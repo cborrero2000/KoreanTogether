@@ -1,0 +1,12 @@
+appId: com.cborrero.koreantogether
+---
+- launchApp
+- tapOn: "Listen & Choose"
+- assertVisible: "Listen & Choose"
+- assertVisible: "Play again"
+- assertVisible: "Slower"
+- tapOn:
+    index: 0
+    text: "Play again"
+- tapOn: "Menu"
+- assertVisible: "Korean"

@@ -3,22 +3,17 @@ import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-n
 import { Screen, Card, Body, Button, Pill } from "../components/UI";
 import { ActivityHeader } from "../components/ActivityHeader";
 import {
-  listVoices,
-  getPreferredVoiceId,
-  setPreferredVoiceId,
-  speak,
-  hasNaturalVoice,
-  hasAnyVoice,
-  VoiceInfo,
+  listVoices, getPreferredVoiceId, setPreferredVoiceId,
+  speak, hasNaturalVoice, hasAnyVoice, VoiceInfo,
 } from "../speech/speech";
-import { colors, font, radius, spacing } from "../theme";
+import { colors, font, shape, spacing, MIN_TOUCH } from "../theme";
 
 const SAMPLE = "안녕하세요. 만나서 반가워요. 이렇게 들려요.";
 
 export function SettingsScreen({ onBack }: { onBack: () => void }) {
   const voices = listVoices();
   const [selected, setSelected] = useState<string | null>(getPreferredVoiceId());
-  const natural = hasNaturalVoice();
+  const natural  = hasNaturalVoice();
   const anyVoice = hasAnyVoice();
 
   function pick(v: VoiceInfo | null) {
@@ -31,27 +26,36 @@ export function SettingsScreen({ onBack }: { onBack: () => void }) {
   return (
     <Screen>
       <ActivityHeader title="목소리 Voice" onBack={onBack} />
-      <ScrollView contentContainerStyle={{ paddingBottom: spacing.xl }}>
-        <Body style={{ color: colors.textSoft, marginTop: spacing.md }}>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ paddingBottom: spacing.xl }}
+      >
+        <Body style={{ color: colors.onSurfaceVariant, marginTop: spacing.md }}>
           Pick the Korean voice you like best. Tap one to hear a sample.
         </Body>
 
         {!natural && (
-          <Card style={{ marginTop: spacing.md, backgroundColor: colors.correctBg, borderColor: colors.correct }}>
-            <Text style={{ fontSize: font.body, fontWeight: "700", color: colors.text }}>
+          <Card
+            style={{
+              marginTop: spacing.md,
+              backgroundColor: colors.primaryContainer,
+              borderColor: colors.primary,
+            }}
+          >
+            <Text style={{ fontSize: font.bodyLarge, fontWeight: "700", color: colors.onPrimaryContainer }}>
               💡 Want a natural, human-sounding Korean voice?
             </Text>
-            <Body style={{ color: colors.text, marginTop: spacing.xs }}>
+            <Body style={{ color: colors.onPrimaryContainer, marginTop: spacing.xs }}>
               {Platform.OS === "web"
                 ? anyVoice
-                  ? "This browser only has a basic Korean voice. Open the app in Microsoft Edge for free, lifelike “Natural” voices (SunHi 선희 and InJoon 인준)."
-                  : "No Korean voice was found in this browser. Open the app in Microsoft Edge — it has free, natural Korean voices (SunHi, InJoon) built in."
-                : "Install your device's Korean voice in Settings (Accessibility → Spoken Content / Text-to-speech) and choose the enhanced quality for a natural sound."}
+                  ? "This browser only has a basic Korean voice. Open in Microsoft Edge for free, lifelike 'Natural' voices (SunHi, InJoon)."
+                  : "No Korean voice found. Open in Microsoft Edge — it has free, natural Korean voices built in."
+                : "Install your device's Korean voice in Settings (Accessibility → Spoken Content / Text-to-speech) and choose Enhanced quality."}
             </Body>
           </Card>
         )}
 
-        {/* Automatic = let the app pick the best available voice */}
+        {/* Automatic option */}
         <VoiceRow
           name="Automatic (best available)"
           sub="Let the app choose for you"
@@ -71,56 +75,62 @@ export function SettingsScreen({ onBack }: { onBack: () => void }) {
           />
         ))}
 
-        <Button title="샘플 듣기 Hear a sample" icon="🔊" variant="neutral" onPress={() => speak(SAMPLE, { voiceId: selected ?? undefined })} style={{ marginTop: spacing.lg }} />
+        <Button
+          title="샘플 듣기 Hear a sample"
+          icon="🔊"
+          variant="tonal"
+          onPress={() => speak(SAMPLE, { voiceId: selected ?? undefined })}
+          style={{ marginTop: spacing.lg }}
+        />
       </ScrollView>
     </Screen>
   );
 }
 
 function VoiceRow({
-  name,
-  sub,
-  natural,
-  selected,
-  onPress,
+  name, sub, natural, selected, onPress,
 }: {
-  name: string;
-  sub: string;
-  natural: boolean;
-  selected: boolean;
-  onPress: () => void;
+  name: string; sub: string; natural: boolean; selected: boolean; onPress: () => void;
 }) {
   return (
     <Pressable
       onPress={onPress}
+      accessibilityRole="radio"
+      accessibilityLabel={name}
+      accessibilityState={{ selected }}
       style={({ pressed }) => [
-        styles.row,
-        { borderColor: selected ? colors.primary : colors.border, backgroundColor: selected ? colors.correctBg : colors.card },
-        pressed && { opacity: 0.9 },
+        s.row,
+        selected && { borderColor: colors.primary, backgroundColor: colors.primaryContainer },
+        pressed && { opacity: 0.88 },
       ]}
     >
       <View style={{ flex: 1 }}>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.sub}>{sub}</Text>
+        <Text style={[s.name, selected && { color: colors.onPrimaryContainer }]}>{name}</Text>
+        <Text style={[s.sub, selected && { color: colors.onPrimaryContainer }]}>{sub}</Text>
       </View>
       {natural && <Pill tone="good" text="Natural" />}
-      {selected && <Text style={styles.check}>✓</Text>}
+      {selected && (
+        <Text style={{ fontSize: font.headlineSmall, color: colors.primary, fontWeight: "900", marginLeft: spacing.sm }}>
+          ✓
+        </Text>
+      )}
     </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
+const s = StyleSheet.create({
   row: {
-    minHeight: 64,
-    borderRadius: radius.md,
-    borderWidth: 2,
+    minHeight: MIN_TOUCH + 20,
+    borderRadius: shape.medium,
+    borderWidth: 1.5,
+    borderColor: colors.outlineVariant,
+    backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
     marginTop: spacing.sm,
     flexDirection: "row",
     alignItems: "center",
   },
-  name: { fontSize: font.body, fontWeight: "700", color: colors.text },
-  sub: { fontSize: font.label, color: colors.textSoft, marginTop: 2 },
-  check: { fontSize: font.heading, color: colors.primary, fontWeight: "900", marginLeft: spacing.sm },
+  name: { fontSize: font.bodyLarge, fontWeight: "700", color: colors.onSurface },
+  sub:  { fontSize: font.labelMedium, color: colors.onSurfaceVariant, marginTop: spacing.xxs },
 });

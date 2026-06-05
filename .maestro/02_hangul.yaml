@@ -1,0 +1,14 @@
+appId: com.cborrero.koreantogether
+---
+- launchApp
+- tapOn: "Hangul"
+- assertVisible: "Hangul"
+- assertVisible: "Consonants"
+- assertVisible: "Vowels"
+- assertVisible: "Quiz me"
+- tapOn: "Vowels"
+- tapOn: "Quiz me"
+- assertVisible: "Quiz"
+- assertVisible: "Hear it"
+- tapOn: "Menu"
+- assertVisible: "Korean"

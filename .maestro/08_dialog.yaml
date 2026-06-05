@@ -1,0 +1,12 @@
+appId: com.cborrero.koreantogether
+---
+- launchApp
+- tapOn: "Dialog & Question"
+- assertVisible: "Dialog"
+- assertVisible: "Play"
+- assertVisible: "Slower"
+- assertVisible: "Translation"
+- tapOn: "Translation"
+- assertVisible: "Hide"
+- tapOn: "Menu"
+- assertVisible: "Korean"

@@ -1,0 +1,16 @@
+appId: com.cborrero.koreantogether
+---
+# Note: Samsung Galaxy Z Fold — Maestro captures the cover display.
+# These flows verify the accessibility tree via uiautomator instead.
+# All assertions below match exact text from uiautomator dump.
+- launchApp
+- extendedWaitUntil:
+    visible: "Korean"
+    timeout: 8000
+- assertVisible: "Korean"
+- assertVisible: "Voice"
+- assertVisible: "Hangul"
+- assertVisible: "Vocabulary"
+- assertVisible: "Say It"
+- assertVisible: "Recall"
+- assertVisible: "Exposure"

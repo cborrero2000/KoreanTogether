@@ -1,0 +1,13 @@
+appId: com.cborrero.koreantogether
+---
+- launchApp
+- tapOn: "Vocabulary"
+- assertVisible: "Vocabulary"
+- assertVisible: "Hear word"
+- tapOn: "Translation"
+- assertVisible: "water"
+- tapOn: "See in a sentence"
+- assertVisible: "Hear sentence"
+- tapOn: "Next"
+- tapOn: "Menu"
+- assertVisible: "Korean"

@@ -5,14 +5,13 @@ import { ActivityHeader } from "../components/ActivityHeader";
 import { DoneCard } from "../components/DoneCard";
 import { speak } from "../speech/speech";
 import { hangulVowels, hangulConsonants, HangulItem } from "../data/content";
-import { colors, font, radius, spacing } from "../theme";
+import { colors, font, shape, spacing, MIN_TOUCH } from "../theme";
 import { shuffle } from "../util";
 
 type Mode = "learn" | "quiz";
 
 export function HangulScreen({ onBack }: { onBack: () => void }) {
   const [mode, setMode] = useState<Mode>("learn");
-
   return mode === "quiz" ? (
     <HangulQuiz onBack={onBack} onExit={() => setMode("learn")} />
   ) : (
@@ -20,7 +19,7 @@ export function HangulScreen({ onBack }: { onBack: () => void }) {
   );
 }
 
-/* ---------- Learn / browse ---------- */
+/* ── Learn / browse ──────────────────────────────────────────────────────── */
 
 function HangulLearn({ onBack, onQuiz }: { onBack: () => void; onQuiz: () => void }) {
   const [tab, setTab] = useState<"vowels" | "consonants">("consonants");
@@ -29,27 +28,40 @@ function HangulLearn({ onBack, onQuiz }: { onBack: () => void; onQuiz: () => voi
   return (
     <Screen>
       <ActivityHeader title="한글 Hangul" onBack={onBack} />
-      <ScrollView contentContainerStyle={{ paddingBottom: spacing.xl }}>
-        <Body style={{ color: colors.textSoft, marginTop: spacing.md }}>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ paddingBottom: spacing.xl }}
+      >
+        <Body style={{ color: colors.onSurfaceVariant, marginTop: spacing.md }}>
           Tap a letter to hear its sound and an example word.
         </Body>
 
-        <View style={styles.tabs}>
-          <Pressable
-            onPress={() => setTab("consonants")}
-            style={[styles.tab, tab === "consonants" && styles.tabActive]}
-          >
-            <Text style={[styles.tabText, tab === "consonants" && styles.tabTextActive]}>자음 Consonants</Text>
-          </Pressable>
-          <Pressable onPress={() => setTab("vowels")} style={[styles.tab, tab === "vowels" && styles.tabActive]}>
-            <Text style={[styles.tabText, tab === "vowels" && styles.tabTextActive]}>모음 Vowels</Text>
-          </Pressable>
+        {/* MD3-style tab bar */}
+        <View
+          style={s.tabs}
+          accessibilityRole="tablist"
+        >
+          {(["consonants", "vowels"] as const).map((t) => {
+            const active = tab === t;
+            return (
+              <Pressable
+                key={t}
+                onPress={() => setTab(t)}
+                accessibilityRole="tab"
+                accessibilityState={{ selected: active }}
+                accessibilityLabel={t === "consonants" ? "자음 Consonants" : "모음 Vowels"}
+                style={[s.tab, active && s.tabActive]}
+              >
+                <Text style={[s.tabText, active && s.tabTextActive]}>
+                  {t === "consonants" ? "자음 Consonants" : "모음 Vowels"}
+                </Text>
+              </Pressable>
+            );
+          })}
         </View>
 
-        <View style={styles.grid}>
-          {data.map((it) => (
-            <LetterCard key={it.char} item={it} />
-          ))}
+        <View style={s.grid}>
+          {data.map((it) => <LetterCard key={it.char} item={it} />)}
         </View>
 
         <Button title="퀴즈 Quiz me" icon="✏️" onPress={onQuiz} style={{ marginTop: spacing.lg }} />
@@ -62,20 +74,24 @@ function LetterCard({ item }: { item: HangulItem }) {
   const [open, setOpen] = useState(false);
   return (
     <Pressable
-      onPress={() => {
-        setOpen((o) => !o);
-        speak(item.syllable);
-      }}
-      style={({ pressed }) => [styles.cell, pressed && { opacity: 0.85 }]}
+      onPress={() => { setOpen((o) => !o); speak(item.syllable); }}
+      accessibilityRole="button"
+      accessibilityLabel={`${item.char}, ${item.rom}`}
+      style={({ pressed }) => [s.cell, pressed && { opacity: 0.85 }]}
     >
-      <Text style={styles.cellChar}>{item.char}</Text>
-      <Text style={styles.cellRom}>{item.rom}</Text>
+      <Text style={s.cellChar}>{item.char}</Text>
+      <Text style={s.cellRom}>{item.rom}</Text>
       {open && (
         <View style={{ alignItems: "center", marginTop: spacing.xs }}>
-          <Text style={styles.cellName}>이름 {item.name}</Text>
-          <Pressable onPress={() => speak(item.ex.word)} style={styles.exBtn}>
-            <Text style={styles.exWord}>{item.ex.word}</Text>
-            <Text style={styles.exRom}>{item.ex.rom} · {item.ex.en} 🔊</Text>
+          <Text style={s.cellName}>이름 {item.name}</Text>
+          <Pressable
+            onPress={() => speak(item.ex.word)}
+            accessibilityRole="button"
+            accessibilityLabel={`Example: ${item.ex.word}, ${item.ex.en}`}
+            style={s.exBtn}
+          >
+            <Text style={s.exWord}>{item.ex.word}</Text>
+            <Text style={s.exRom}>{item.ex.rom} · {item.ex.en} 🔊</Text>
           </Pressable>
         </View>
       )}
@@ -83,7 +99,7 @@ function LetterCard({ item }: { item: HangulItem }) {
   );
 }
 
-/* ---------- Quiz: hear/see a letter, pick its romanization ---------- */
+/* ── Quiz ────────────────────────────────────────────────────────────────── */
 
 function HangulQuiz({ onBack, onExit }: { onBack: () => void; onExit: () => void }) {
   const pool = useMemo(() => shuffle([...hangulConsonants, ...hangulVowels]).slice(0, 12), []);
@@ -96,9 +112,7 @@ function HangulQuiz({ onBack, onExit }: { onBack: () => void; onExit: () => void
   const options = useMemo(() => {
     const wrong = shuffle(
       [...hangulConsonants, ...hangulVowels].filter((x) => x.rom !== item.rom)
-    )
-      .slice(0, 2)
-      .map((x) => x.rom);
+    ).slice(0, 2).map((x) => x.rom);
     return shuffle([item.rom, ...wrong]);
   }, [i]);
   const answerIndex = options.indexOf(item.rom);
@@ -110,17 +124,9 @@ function HangulQuiz({ onBack, onExit }: { onBack: () => void; onExit: () => void
   }
   function next() {
     if (i + 1 >= pool.length) setDone(true);
-    else {
-      setI(i + 1);
-      setPicked(null);
-    }
+    else { setI(i + 1); setPicked(null); }
   }
-  function restart() {
-    setI(0);
-    setPicked(null);
-    setScore(0);
-    setDone(false);
-  }
+  function restart() { setI(0); setPicked(null); setScore(0); setDone(false); }
 
   if (done) {
     return (
@@ -134,10 +140,21 @@ function HangulQuiz({ onBack, onExit }: { onBack: () => void; onExit: () => void
   return (
     <Screen>
       <ActivityHeader title="한글 퀴즈 Quiz" onBack={onExit} step={i + 1} total={pool.length} />
-      <ScrollView contentContainerStyle={{ paddingBottom: spacing.xl }}>
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingBottom: spacing.xl }}>
         <Card style={{ marginTop: spacing.md, alignItems: "center" }}>
-          <Text style={styles.quizChar}>{item.char}</Text>
-          <Button title="소리 듣기 Hear it" icon="🔊" variant="neutral" onPress={() => speak(item.syllable)} style={{ marginTop: spacing.sm }} />
+          <Text
+            style={s.quizChar}
+            accessibilityLabel={`Letter: ${item.char}`}
+          >
+            {item.char}
+          </Text>
+          <Button
+            title="소리 듣기 Hear it"
+            icon="🔊"
+            variant="tonal"
+            onPress={() => speak(item.syllable)}
+            style={{ marginTop: spacing.sm }}
+          />
         </Card>
         <H2 style={{ marginTop: spacing.lg, marginBottom: spacing.xs }}>What sound is this?</H2>
         {options.map((opt, idx) => {
@@ -147,38 +164,66 @@ function HangulQuiz({ onBack, onExit }: { onBack: () => void; onExit: () => void
             else if (idx === picked) state = "wrong";
             else state = "dim";
           }
-          return <ChoiceButton key={idx} label={opt} state={state} disabled={picked != null} onPress={() => choose(idx)} />;
+          return (
+            <ChoiceButton
+              key={idx}
+              label={opt}
+              state={state}
+              disabled={picked != null}
+              onPress={() => choose(idx)}
+            />
+          );
         })}
         {picked != null && (
-          <Button title={i + 1 >= pool.length ? "See results" : "다음 Next"} onPress={next} style={{ marginTop: spacing.md }} />
+          <Button
+            title={i + 1 >= pool.length ? "See results" : "다음 Next"}
+            onPress={next}
+            style={{ marginTop: spacing.md }}
+          />
         )}
       </ScrollView>
     </Screen>
   );
 }
 
-const styles = StyleSheet.create({
-  tabs: { flexDirection: "row", marginTop: spacing.md, backgroundColor: colors.neutralBtn, borderRadius: radius.pill, padding: 4 },
-  tab: { flex: 1, paddingVertical: spacing.sm, alignItems: "center", borderRadius: radius.pill },
-  tabActive: { backgroundColor: colors.card },
-  tabText: { fontSize: font.label, fontWeight: "700", color: colors.textSoft },
+const s = StyleSheet.create({
+  tabs: {
+    flexDirection: "row",
+    marginTop: spacing.md,
+    backgroundColor: colors.surfaceVariant,
+    borderRadius: shape.full,
+    padding: 4,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: spacing.sm,
+    alignItems: "center",
+    borderRadius: shape.full,
+    minHeight: MIN_TOUCH,
+    justifyContent: "center",
+  },
+  tabActive: { backgroundColor: colors.surface },
+  tabText: { fontSize: font.labelLarge, fontWeight: "700", color: colors.onSurfaceVariant },
   tabTextActive: { color: colors.primary },
+
   grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", marginTop: spacing.md },
   cell: {
     width: "31.5%",
-    backgroundColor: colors.card,
-    borderRadius: radius.md,
+    backgroundColor: colors.surface,
+    borderRadius: shape.medium,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.outlineVariant,
     paddingVertical: spacing.md,
     alignItems: "center",
     marginBottom: spacing.sm,
+    minHeight: MIN_TOUCH + 16,
   },
-  cellChar: { fontSize: 44, fontWeight: "800", color: colors.text },
-  cellRom: { fontSize: font.label, color: colors.rom, fontWeight: "700", marginTop: 2 },
-  cellName: { fontSize: font.label, color: colors.textSoft },
-  exBtn: { alignItems: "center", marginTop: spacing.xs },
-  exWord: { fontSize: font.body, fontWeight: "700", color: colors.primary },
-  exRom: { fontSize: font.label - 2, color: colors.textSoft, marginTop: 1, textAlign: "center" },
-  quizChar: { fontSize: 96, fontWeight: "800", color: colors.text },
+  cellChar: { fontSize: font.hangul, fontWeight: "800", color: colors.onSurface },
+  cellRom:  { fontSize: font.labelLarge, color: colors.secondary, fontWeight: "700", marginTop: spacing.xxs },
+  cellName: { fontSize: font.labelMedium, color: colors.onSurfaceVariant },
+  exBtn:    { alignItems: "center", marginTop: spacing.xs },
+  exWord:   { fontSize: font.bodyLarge, fontWeight: "700", color: colors.primary },
+  exRom:    { fontSize: font.labelSmall, color: colors.onSurfaceVariant, marginTop: spacing.xxs, textAlign: "center" },
+
+  quizChar: { fontSize: font.hangulXL, fontWeight: "800", color: colors.onSurface },
 });

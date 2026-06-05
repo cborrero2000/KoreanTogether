@@ -11,71 +11,102 @@ export function VocabScreen({ onBack }: { onBack: () => void }) {
   const [showSentence, setShowSentence] = useState(false);
   const [showEn, setShowEn] = useState(false);
 
+  if (vocab.length === 0) {
+    return (
+      <Screen>
+        <ActivityHeader title="단어 Vocabulary" onBack={onBack} />
+        <Card style={{ marginTop: spacing.lg }}>
+          <Body>No vocabulary items available.</Body>
+        </Card>
+      </Screen>
+    );
+  }
+
   const item = vocab[i];
 
-  function reset() {
-    setShowSentence(false);
-    setShowEn(false);
-  }
-  function next() {
-    stopSpeaking();
-    setI((i + 1) % vocab.length);
-    reset();
-  }
-  function prev() {
-    stopSpeaking();
-    setI((i - 1 + vocab.length) % vocab.length);
-    reset();
-  }
+  function reset() { setShowSentence(false); setShowEn(false); }
+  function next() { stopSpeaking(); setI((i + 1) % vocab.length); reset(); }
+  function prev() { stopSpeaking(); setI((i - 1 + vocab.length) % vocab.length); reset(); }
 
   return (
     <Screen>
       <ActivityHeader title="단어 Vocabulary" onBack={onBack} step={i + 1} total={vocab.length} />
-      <ScrollView contentContainerStyle={{ paddingBottom: spacing.xl }}>
-        {/* The word alone, with a picture */}
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ paddingBottom: spacing.xl }}
+      >
+        {/* Word card */}
         <Card style={{ marginTop: spacing.md, alignItems: "center" }}>
-          <Text style={styles.emoji}>{item.emoji}</Text>
-          <Text style={styles.word}>{item.ko}</Text>
-          <Rom style={{ fontSize: font.body }}>{item.rom}</Rom>
+          <Text style={s.emoji} accessibilityLabel={item.en}>{item.emoji}</Text>
+          <Text style={s.word}>{item.ko}</Text>
+          <Rom style={{ fontSize: font.bodyLarge }}>{item.rom}</Rom>
           {showEn ? (
             <Body style={{ marginTop: spacing.xs, fontWeight: "700" }}>{item.en}</Body>
           ) : (
-            <Button title="뜻 보기 Translation" icon="🌐" variant="ghost" onPress={() => setShowEn(true)} style={{ marginTop: spacing.sm }} />
+            <Button
+              title="뜻 보기 Translation"
+              icon="🌐"
+              variant="outlined"
+              onPress={() => setShowEn(true)}
+              style={{ marginTop: spacing.sm }}
+            />
           )}
-          <Button title="듣기 Hear word" icon="🔊" variant="neutral" onPress={() => speak(item.ko)} style={{ marginTop: spacing.md, alignSelf: "stretch" }} />
+          <Button
+            title="듣기 Hear word"
+            icon="🔊"
+            variant="tonal"
+            onPress={() => speak(item.ko)}
+            style={{ marginTop: spacing.md, alignSelf: "stretch" }}
+          />
         </Card>
 
-        {/* The same word inside a sentence, with a picture */}
+        {/* Sentence card */}
         {!showSentence ? (
-          <Button title="문장으로 보기 · See in a sentence" icon="📝" onPress={() => setShowSentence(true)} style={{ marginTop: spacing.lg }} />
+          <Button
+            title="문장으로 보기 · See in a sentence"
+            icon="📝"
+            onPress={() => setShowSentence(true)}
+            style={{ marginTop: spacing.lg }}
+          />
         ) : (
           <Card style={{ marginTop: spacing.lg }}>
-            <View style={styles.sentRow}>
-              <Text style={styles.sentEmoji}>{item.emoji}</Text>
+            <View style={s.sentRow}>
+              <Text style={s.sentEmoji}>{item.emoji}</Text>
               <View style={{ flex: 1 }}>
-                <Text style={styles.sentence}>{item.sentence.ko}</Text>
+                <Text style={s.sentence}>{item.sentence.ko}</Text>
                 <Rom>{item.sentence.rom}</Rom>
-                {showEn && <Body style={{ color: colors.textSoft, marginTop: 2 }}>{item.sentence.en}</Body>}
+                {showEn && (
+                  <Body style={{ color: colors.onSurfaceVariant, marginTop: spacing.xxs }}>
+                    {item.sentence.en}
+                  </Body>
+                )}
               </View>
             </View>
-            <Button title="문장 듣기 Hear sentence" icon="🔊" variant="neutral" onPress={() => speak(item.sentence.ko)} style={{ marginTop: spacing.md }} />
+            <Button
+              title="문장 듣기 Hear sentence"
+              icon="🔊"
+              variant="tonal"
+              onPress={() => speak(item.sentence.ko)}
+              style={{ marginTop: spacing.md }}
+            />
           </Card>
         )}
 
-        <View style={styles.navRow}>
-          <Button title="‹ 이전 Prev" variant="neutral" onPress={prev} style={{ flex: 1, marginRight: spacing.sm }} />
-          <Button title="다음 Next ›" onPress={next} style={{ flex: 1, marginLeft: spacing.sm }} />
+        {/* Navigation */}
+        <View style={s.navRow}>
+          <Button title="‹ 이전 Prev" variant="tonal"    onPress={prev} style={{ flex: 1, marginRight: spacing.sm }} />
+          <Button title="다음 Next ›" variant="filled"   onPress={next} style={{ flex: 1, marginLeft:  spacing.sm }} />
         </View>
       </ScrollView>
     </Screen>
   );
 }
 
-const styles = StyleSheet.create({
-  emoji: { fontSize: 88 },
-  word: { fontSize: font.hangul, fontWeight: "800", color: colors.text, marginTop: spacing.sm },
+const s = StyleSheet.create({
+  emoji:   { fontSize: font.emojiXL },
+  word:    { fontSize: font.hangul, fontWeight: "800", color: colors.onSurface, marginTop: spacing.sm },
   sentRow: { flexDirection: "row", alignItems: "center" },
-  sentEmoji: { fontSize: 48, marginRight: spacing.md },
-  sentence: { fontSize: font.big, fontWeight: "700", color: colors.text, lineHeight: font.big * 1.3 },
-  navRow: { flexDirection: "row", marginTop: spacing.lg },
+  sentEmoji: { fontSize: font.emojiMd, marginRight: spacing.md },
+  sentence:{ fontSize: font.titleLarge, fontWeight: "700", color: colors.onSurface, lineHeight: font.titleLarge * 1.35 },
+  navRow:  { flexDirection: "row", marginTop: spacing.lg },
 });
