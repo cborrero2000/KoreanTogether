@@ -25,6 +25,15 @@
     "web": {
       "bundler": "metro",
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "Allow Korean Together to use the microphone for speaking practice.",
+          "speechRecognitionPermission": "Allow Korean Together to use speech recognition to check your spoken Korean."
+        }
+      ]
+    ]
   }
 }

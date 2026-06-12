@@ -37,7 +37,7 @@ export function DialogScreen({ onBack }: { onBack: () => void }) {
     return (
       <Screen>
         <ActivityHeader title="대화 Dialog" onBack={onBack} />
-        <DoneCard score={score} total={dialogs.length} onRestart={restart} onBack={onBack} />
+        <DoneCard score={score} total={dialogs.length} onRestart={restart} onBack={onBack} mode="dialog" modeLabel="대화 Dialog & Question" />
       </Screen>
     );
   }

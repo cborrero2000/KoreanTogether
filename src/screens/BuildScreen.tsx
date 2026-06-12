@@ -52,7 +52,7 @@ export function BuildScreen({ onBack }: { onBack: () => void }) {
     return (
       <Screen>
         <ActivityHeader title="만들기 Build It" onBack={onBack} />
-        <DoneCard score={score} total={POOL.length} onRestart={restart} onBack={onBack} />
+        <DoneCard score={score} total={POOL.length} onRestart={restart} onBack={onBack} mode="build" modeLabel="만들기 Build It" />
       </Screen>
     );
   }

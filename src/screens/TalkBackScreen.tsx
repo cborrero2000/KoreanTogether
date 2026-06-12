@@ -91,9 +91,9 @@ export function TalkBackScreen({ onBack }: { onBack: () => void }) {
           />
         ) : (
           <Card style={{ marginTop: spacing.lg }}>
-            <Body style={{ fontWeight: "700" }}>🎤 Spoken replies work in Chrome / Edge on a computer.</Body>
+            <Body style={{ fontWeight: "700" }}>🎤 Spoken replies aren't available on this device.</Body>
             <Body style={{ color: colors.onSurfaceVariant, marginTop: spacing.xs }}>
-              For now, read the example reply aloud, then continue.
+              Speech recognition needs microphone permission, or isn't supported here. For now, read the example reply aloud, then continue.
             </Body>
           </Card>
         )}

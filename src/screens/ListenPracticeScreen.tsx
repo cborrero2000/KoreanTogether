@@ -38,7 +38,7 @@ export function ListenPracticeScreen({ onBack }: { onBack: () => void }) {
     return (
       <Screen>
         <ActivityHeader title="듣기 연습 Listening" onBack={onBack} />
-        <DoneCard score={score} total={clips.length} onRestart={restart} onBack={onBack} />
+        <DoneCard score={score} total={clips.length} onRestart={restart} onBack={onBack} mode="practice" modeLabel="듣기 연습 Listening Practice" />
       </Screen>
     );
   }

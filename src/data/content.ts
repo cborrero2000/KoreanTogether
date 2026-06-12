@@ -2685,6 +2685,150 @@ export const scenes: SceneItem[] = [
 ];
 
 /* ── LISTENING PRACTICE / CLIPS (25) ────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════ */
+/*  CASUAL SPEECH (반말)  — formal 해요체/존댓말 vs. the casual/contracted */
+/*  speech you actually hear in K-dramas.                                  */
+/* ════════════════════════════════════════════════════════════════════ */
+
+export type CasualPair = {
+  situation: string;                                  // e.g. "Telling someone you love them"
+  formal: { ko: string; rom: string; en: string };    // 해요체 / 존댓말
+  casual: { ko: string; rom: string; en: string };    // 반말
+  note: string;                                       // what changes & when it fits
+};
+
+export const casualPairs: CasualPair[] = [
+  // ── Greetings ──────────────────────────────────────────────────────
+  { situation: "Saying hi",
+    formal: { ko:"안녕하세요.",  rom:"annyeonghaseyo.",  en:"Hello." },
+    casual: { ko:"안녕.",        rom:"annyeong.",        en:"Hi." },
+    note: "안녕하세요 → 안녕. Drop the polite ending; use with close friends and people younger or the same age." },
+  { situation: "Asking how someone's been",
+    formal: { ko:"잘 지냈어요?", rom:"jal jinaesseoyo?", en:"How have you been?" },
+    casual: { ko:"잘 지냈어?",   rom:"jal jinaesseo?",   en:"How've you been?" },
+    note: "Drop -요 to make 지냈어요 → 지냈어. Fine with friends; rude to a boss or elder." },
+  { situation: "Saying goodbye (you leave)",
+    formal: { ko:"안녕히 계세요.", rom:"annyeonghi gyeseyo.", en:"Goodbye (stay well)." },
+    casual: { ko:"잘 있어. 나 갈게.", rom:"jal isseo. na galge.", en:"Bye, I'm off." },
+    note: "The formal split (가세요/계세요) collapses into casual 잘 가 / 잘 있어 between friends." },
+
+  // ── Asking what someone's doing ────────────────────────────────────
+  { situation: "Asking what someone is doing",
+    formal: { ko:"뭐 하고 있어요?", rom:"mwo hago isseoyo?", en:"What are you doing?" },
+    casual: { ko:"뭐해?",          rom:"mwohae?",          en:"Whatcha doing?" },
+    note: "뭐 하고 있어요 → 뭐 해 → 뭐해 (often run together at native speed). Very common in texts and dramas." },
+  { situation: "Asking where someone is going",
+    formal: { ko:"어디 가세요?", rom:"eodi gaseyo?", en:"Where are you going?" },
+    casual: { ko:"어디 가?",     rom:"eodi ga?",     en:"Where you going?" },
+    note: "가세요/가요 → 가. The plain 가 already sounds casual; tone makes it a question." },
+
+  // ── Love & longing ─────────────────────────────────────────────────
+  { situation: "Telling someone you love them",
+    formal: { ko:"사랑해요.", rom:"saranghaeyo.", en:"I love you." },
+    casual: { ko:"사랑해.",   rom:"saranghae.",   en:"I love you." },
+    note: "사랑해요 → 사랑해. The drama staple — said to a partner or very close family." },
+  { situation: "Saying you miss someone",
+    formal: { ko:"보고 싶어요.", rom:"bogo sipeoyo.", en:"I miss you." },
+    casual: { ko:"보고 싶어.",   rom:"bogo sipeo.",   en:"I miss you." },
+    note: "Just drop -요. 보고 싶어 is what couples actually say." },
+
+  // ── Agreement / disagreement ───────────────────────────────────────
+  { situation: "Agreeing (yeah)",
+    formal: { ko:"네, 맞아요.", rom:"ne, majayo.", en:"Yes, that's right." },
+    casual: { ko:"응, 맞아.",   rom:"eung, maja.", en:"Yeah, right." },
+    note: "네 → 응 (or 어), and 맞아요 → 맞아. 응/어 is the casual 'yes'." },
+  { situation: "Disagreeing (no way)",
+    formal: { ko:"아니에요.",   rom:"anieyo.",   en:"No, it's not." },
+    casual: { ko:"아니야. / 아냐.", rom:"aniya. / anya.", en:"No way. / Nope." },
+    note: "아니에요 → 아니야, and at speed it contracts to 아냐. Both are normal casual speech." },
+
+  // ── Apologizing / thanks ───────────────────────────────────────────
+  { situation: "Apologizing",
+    formal: { ko:"미안해요.", rom:"mianhaeyo.", en:"I'm sorry." },
+    casual: { ko:"미안해. / 미안.", rom:"mianhae. / mian.", en:"Sorry." },
+    note: "미안해요 → 미안해, and the clipped 미안 is even more casual ('my bad')." },
+  { situation: "Saying thanks",
+    formal: { ko:"고마워요.", rom:"gomawoyo.", en:"Thank you." },
+    casual: { ko:"고마워.",   rom:"gomawo.",   en:"Thanks." },
+    note: "고마워요 → 고마워. (Note: 감사합니다 is formal-formal; its casual cousin is 고마워.)" },
+
+  // ── Requests & commands ────────────────────────────────────────────
+  { situation: "Asking someone to wait",
+    formal: { ko:"잠깐만 기다려 주세요.", rom:"jamkkanman gidaryeo juseyo.", en:"Please wait a moment." },
+    casual: { ko:"잠깐만. / 기다려.",     rom:"jamkkanman. / gidaryeo.",     en:"Hold on. / Wait." },
+    note: "기다려 주세요 → 기다려, and 잠깐만 alone works as 'hang on'." },
+  { situation: "Telling someone to stop",
+    formal: { ko:"그만하세요.", rom:"geumanhaseyo.", en:"Please stop." },
+    casual: { ko:"그만해. / 그만!", rom:"geumanhae. / geuman!", en:"Stop it. / Stop!" },
+    note: "그만하세요 → 그만해. The bare 그만! is a sharp, emotional 'enough!'" },
+  { situation: "Telling someone to come here",
+    formal: { ko:"이리 오세요.", rom:"iri oseyo.", en:"Please come here." },
+    casual: { ko:"이리 와. / 일루 와.", rom:"iri wa. / illu wa.", en:"Come here." },
+    note: "오세요 → 와. In fast speech 이리 → 일루. Said to friends, kids, or a partner." },
+
+  // ── Everyday check-ins ─────────────────────────────────────────────
+  { situation: "Asking if someone ate",
+    formal: { ko:"밥 먹었어요?", rom:"bap meogeosseoyo?", en:"Have you eaten?" },
+    casual: { ko:"밥 먹었어?",   rom:"bap meogeosseo?",   en:"You eat yet?" },
+    note: "Drop -요: 먹었어요 → 먹었어. A super-common caring greeting in Korean." },
+  { situation: "Asking what's wrong",
+    formal: { ko:"무슨 일 있어요?", rom:"museun il isseoyo?", en:"Is something wrong?" },
+    casual: { ko:"왜 그래? / 무슨 일이야?", rom:"wae geurae? / museun il-iya?", en:"What's wrong? / What's up?" },
+    note: "있어요 → 이야, and 왜 그래? ('why are you like that?') is the go-to drama line." },
+  { situation: "Saying you're tired",
+    formal: { ko:"피곤해요.", rom:"pigonhaeyo.", en:"I'm tired." },
+    casual: { ko:"피곤해. / 졸려.", rom:"pigonhae. / jollyeo.", en:"I'm tired. / I'm sleepy." },
+    note: "피곤해요 → 피곤해. 졸려 ('sleepy') is another casual everyday one." },
+
+  // ── Let's / suggestions ────────────────────────────────────────────
+  { situation: "Let's go",
+    formal: { ko:"같이 가요.", rom:"gachi gayo.", en:"Let's go together." },
+    casual: { ko:"가자! / 같이 가.", rom:"gaja! / gachi ga.", en:"Let's go! / Come on." },
+    note: "The casual 'let's' ending is -자: 가요 → 가자. Energetic and common among friends." },
+  { situation: "Let's eat",
+    formal: { ko:"밥 먹어요.", rom:"bap meogeoyo.", en:"Let's eat." },
+    casual: { ko:"밥 먹자.",   rom:"bap meokja.",  en:"Let's eat." },
+    note: "먹어요 → 먹자. The -자 ending turns a statement into a casual invitation." },
+
+  // ── Reactions ──────────────────────────────────────────────────────
+  { situation: "Reacting 'really?'",
+    formal: { ko:"진짜예요?", rom:"jinjjayeyo?", en:"Really?" },
+    casual: { ko:"진짜? / 정말?", rom:"jinjja? / jeongmal?", en:"Really? / For real?" },
+    note: "진짜예요 → 진짜. One of the most-heard reactions in any drama." },
+  { situation: "Reacting with surprise (wow / no way)",
+    formal: { ko:"정말 놀랐어요.", rom:"jeongmal nollasseoyo.", en:"I'm really surprised." },
+    casual: { ko:"헐, 대박! / 미쳤어?", rom:"heol, daebak! / michyeosseo?", en:"Whoa, awesome! / Are you crazy?" },
+    note: "Casual exclamations: 헐 (whoa), 대박 (awesome/insane), 미쳤어? (are you nuts?). Pure drama slang." },
+  { situation: "Saying you're fine / it's okay",
+    formal: { ko:"괜찮아요.", rom:"gwaenchanayo.", en:"I'm okay. / It's okay." },
+    casual: { ko:"괜찮아.",   rom:"gwaenchana.",  en:"I'm fine. / It's fine." },
+    note: "괜찮아요 → 괜찮아. Heard constantly — to reassure or brush something off." },
+
+  // ── Understanding / acknowledging ──────────────────────────────────
+  { situation: "Saying you understand / got it",
+    formal: { ko:"알겠어요.", rom:"algesseoyo.", en:"I understand. / Got it." },
+    casual: { ko:"알겠어. / 알았어.", rom:"algesseo. / arasseo.", en:"Got it. / Okay." },
+    note: "알겠어요 → 알겠어, and 알았어 is the even more relaxed 'fine, okay'." },
+  { situation: "Saying you don't know",
+    formal: { ko:"잘 모르겠어요.", rom:"jal moreugesseoyo.", en:"I don't know." },
+    casual: { ko:"몰라. / 모르겠어.", rom:"molla. / moreugesseo.", en:"Dunno. / No idea." },
+    note: "모르겠어요 → 모르겠어, and the blunt 몰라 ('dunno') is everywhere in casual talk." },
+
+  // ── Close friend vs. boss (same idea, two registers) ───────────────
+  { situation: "Asking a favor — to a boss vs. a close friend",
+    formal: { ko:"이것 좀 도와주시겠어요?", rom:"igeot jom dowajusigesseoyo?", en:"Could you help me with this?" },
+    casual: { ko:"이거 좀 도와줘.", rom:"igeo jom dowajwo.", en:"Help me with this." },
+    note: "Very formal -시겠어요 → casual -줘. Also 이것 → 이거 in speech. Never use the casual one with a boss." },
+  { situation: "Scolding a younger sibling",
+    formal: { ko:"그러지 마세요.", rom:"geureoji maseyo.", en:"Please don't do that." },
+    casual: { ko:"하지 마! / 그러지 마.", rom:"haji ma! / geureoji ma.", en:"Don't! / Stop that." },
+    note: "마세요 → 마. An older sibling or parent uses plain 반말 downward; the child answers in 존댓말." },
+  { situation: "Calling someone (on the phone)",
+    formal: { ko:"여보세요, 지금 통화 괜찮으세요?", rom:"yeoboseyo, jigeum tonghwa gwaenchaneuseyo?", en:"Hello, is now a good time to talk?" },
+    casual: { ko:"여보세요? 야, 지금 어디야?", rom:"yeoboseyo? ya, jigeum eodiya?", en:"Hello? Hey, where are you right now?" },
+    note: "야 ('hey') + plain endings (어디예요 → 어디야) signal close friends. 야 is rude to elders." },
+];
+
 export type ClipItem = {
   title: string; lines: Line[];
   question: string; questionEn: string;
@@ -3395,4 +3539,90 @@ export const clips: ClipItem[] = [
       {speaker:"B",text:"이제 다 잘 될 거예요. 앞으로도 힘내요!",rom:"iJE da jal doel geoyeyo. apeuroTo himnaeyo!",en:"Everything will be fine now. Keep it up going forward!"},
     ], question:"A는 B에게 왜 감사해요?", questionEn:"Why is A thankful to B?",
     options:[{ko:"힘들 때 곁에 있어줘서",en:"For being by their side during hard times"},{ko:"돈을 빌려줘서",en:"For lending money"},{ko:"일을 도와줘서",en:"For helping with work"}], answer:0 },
+
+  // ── 12 K-drama clips · 반말 + contractions ─────────────────────────
+  { title:"싸우는 커플 · A couple arguing", lines:[
+      {speaker:"준서",text:"너 또 연락도 없이 어디 갔다 온 거야?",rom:"neo tto yeollakdo eopsi eodi gatda on geoya?",en:"Where did you go again without even texting?"},
+      {speaker:"하은",text:"왜 그래, 친구 잠깐 만난 거야.",rom:"wae geurae, chingu jamkkan mannan geoya.",en:"What's your problem? I just met a friend for a bit."},
+      {speaker:"준서",text:"전화 좀 받지. 얼마나 걱정했는데.",rom:"jeonhwa jom batji. eolmana geokjeonghaenneunde.",en:"You could've picked up. I was so worried."},
+      {speaker:"하은",text:"미안해... 다음부턴 꼭 연락할게.",rom:"mianhae... daeumbuteon kkok yeollakalge.",en:"Sorry... I'll definitely call next time."},
+    ], question:"준서는 왜 화가 났어요?", questionEn:"Why is Junseo upset?",
+    options:[{ko:"하은이 연락 없이 늦어서",en:"Because Haeun was late without contacting him"},{ko:"하은이 약속을 까먹어서",en:"Because Haeun forgot the plan"},{ko:"하은이 거짓말을 해서",en:"Because Haeun lied"}], answer:0 },
+  { title:"고백 · A confession", lines:[
+      {speaker:"도윤",text:"나... 너한테 할 말 있어.",rom:"na... neohante hal mal isseo.",en:"I... have something to tell you."},
+      {speaker:"서연",text:"뭔데? 왜 그렇게 긴장했어?",rom:"mwonde? wae geureoke ginjanghaesseo?",en:"What is it? Why are you so nervous?"},
+      {speaker:"도윤",text:"사실 나 너 좋아해. 오래 전부터.",rom:"sasil na neo joahae. orae jeonbuteo.",en:"Honestly, I like you. For a long time now."},
+      {speaker:"서연",text:"진짜? 나도... 나도 너 좋아해.",rom:"jinjja? nado... nado neo joahae.",en:"Really? Me too... I like you too."},
+    ], question:"도윤이 서연에게 뭐라고 했어요?", questionEn:"What did Doyoon tell Seoyeon?",
+    options:[{ko:"화가 났다고",en:"That he was angry"},{ko:"좋아한다고 고백했어요",en:"He confessed that he likes her"},{ko:"떠난다고",en:"That he's leaving"}], answer:1 },
+  { title:"놀리는 남매 · Teasing siblings", lines:[
+      {speaker:"민재",text:"야, 너 또 빵점 맞았다며?",rom:"ya, neo tto ppangjeom majatdamyeo?",en:"Hey, I heard you got a zero again?"},
+      {speaker:"수빈",text:"누가 그래! 거짓말하지 마.",rom:"nuga geurae! geojitmalhaji ma.",en:"Who said that! Don't lie."},
+      {speaker:"민재",text:"엄마한테 다 들었거든. 메롱.",rom:"eommahante da deureotgeodeun. merong.",en:"I heard it all from Mom. Nyah-nyah."},
+      {speaker:"수빈",text:"진짜 미워! 저리 가!",rom:"jinjja miwo! jeori ga!",en:"You're the worst! Go away!"},
+    ], question:"민재는 수빈을 어떻게 했어요?", questionEn:"What did Minjae do to Subin?",
+    options:[{ko:"칭찬했어요",en:"Praised her"},{ko:"위로했어요",en:"Comforted her"},{ko:"놀렸어요",en:"Teased her"}], answer:2 },
+  { title:"깜짝 반전 · A surprise reveal", lines:[
+      {speaker:"지호",text:"이 사진 속 사람... 누군지 알아?",rom:"i sajin sok saram... nugunji ara?",en:"This person in the photo... do you know who it is?"},
+      {speaker:"예린",text:"몰라. 누군데 그래?",rom:"molla. nugunde geurae?",en:"No idea. Who is it?"},
+      {speaker:"지호",text:"우리 아빠야. 사라진 줄 알았던.",rom:"uri appaya. sarajin jul aratdeon.",en:"It's my dad. The one we thought had disappeared."},
+      {speaker:"예린",text:"뭐라고?! 그게 말이 돼?",rom:"mworago?! geuge mari dwae?",en:"What?! How is that even possible?"},
+    ], question:"사진 속 사람은 누구예요?", questionEn:"Who is the person in the photo?",
+    options:[{ko:"지호의 아빠",en:"Jiho's dad"},{ko:"예린의 친구",en:"Yerin's friend"},{ko:"낯선 사람",en:"A stranger"}], answer:0 },
+  { title:"응급 상황 · An emergency", lines:[
+      {speaker:"태오",text:"야! 정신 차려! 괜찮아?",rom:"ya! jeongsin charyeo! gwaenchana?",en:"Hey! Snap out of it! Are you okay?"},
+      {speaker:"나윤",text:"머리가... 너무 어지러워.",rom:"meoriga... neomu eojireowo.",en:"My head... I'm so dizzy."},
+      {speaker:"태오",text:"움직이지 마. 내가 구급차 부를게.",rom:"umjigiji ma. naega gugeupcha bureulge.",en:"Don't move. I'll call an ambulance."},
+      {speaker:"나윤",text:"무서워... 가지 마.",rom:"museowo... gaji ma.",en:"I'm scared... don't go."},
+    ], question:"태오는 무엇을 하려고 해요?", questionEn:"What is Taeo trying to do?",
+    options:[{ko:"집에 가려고",en:"Go home"},{ko:"구급차를 부르려고",en:"Call an ambulance"},{ko:"나윤을 혼내려고",en:"Scold Nayoon"}], answer:1 },
+  { title:"질투 · Jealousy", lines:[
+      {speaker:"소율",text:"아까 그 여자랑 왜 그렇게 웃었어?",rom:"akka geu yeojarang wae geureoke useosseo?",en:"Why were you laughing so much with that girl earlier?"},
+      {speaker:"건우",text:"그냥 동료야. 뭘 그런 걸로 그래.",rom:"geunyang dongnyoya. mwol geureon geollo geurae.",en:"She's just a coworker. Why are you making a thing of it?"},
+      {speaker:"소율",text:"질투하는 거 아니거든. 그냥 물어본 거야.",rom:"jiltuhaneun geo anigeodeun. geunyang mureobon geoya.",en:"I'm not jealous, okay. I just asked."},
+      {speaker:"건우",text:"귀엽네. 질투하는 거 다 보여.",rom:"gwiyeomne. jiltuhaneun geo da boyeo.",en:"Cute. I can totally tell you're jealous."},
+    ], question:"소율은 왜 기분이 안 좋아요?", questionEn:"Why is Soyul in a bad mood?",
+    options:[{ko:"건우가 다른 여자랑 웃어서",en:"Because Gunwoo was laughing with another woman"},{ko:"건우가 약속에 늦어서",en:"Because Gunwoo was late"},{ko:"건우가 전화를 안 받아서",en:"Because Gunwoo didn't answer the phone"}], answer:0 },
+  { title:"오해 · A misunderstanding", lines:[
+      {speaker:"유진",text:"너 나 피하는 거지? 왜 자꾸 도망가.",rom:"neo na pihaneun geoji? wae jakku domangga.",en:"You're avoiding me, right? Why do you keep running away?"},
+      {speaker:"현우",text:"아니야, 그게 아니라 일이 너무 바빴어.",rom:"aniya, geuge anira iri neomu bappasseo.",en:"No, it's not that — I've just been swamped with work."},
+      {speaker:"유진",text:"진짜? 난 또 화난 줄 알았잖아.",rom:"jinjja? nan tto hwanan jul aratjana.",en:"Really? I thought you were mad at me."},
+      {speaker:"현우",text:"전혀 아니야. 오해하지 마.",rom:"jeonhyeo aniya. ohaehaji ma.",en:"Not at all. Don't misunderstand."},
+    ], question:"현우는 왜 유진을 못 만났어요?", questionEn:"Why couldn't Hyunwoo meet Yujin?",
+    options:[{ko:"화가 나서",en:"Because he was angry"},{ko:"일이 너무 바빠서",en:"Because he was too busy with work"},{ko:"유진을 피해서",en:"Because he was avoiding her"}], answer:1 },
+  { title:"회사 친구 · Workplace tension", lines:[
+      {speaker:"재민",text:"야, 그 보고서 네가 다 했다고 했다며?",rom:"ya, geu bogoseo nega da haetdago haetdamyeo?",en:"Hey, I heard you said you did that whole report?"},
+      {speaker:"가은",text:"내가 언제? 같이 했다고 분명히 말했어.",rom:"naega eonje? gachi haetdago bunmyeonghi malhaesseo.",en:"When did I? I clearly said we did it together."},
+      {speaker:"재민",text:"됐어. 그냥 앞으론 나 빼고 해.",rom:"dwaesseo. geunyang apeuron na ppaego hae.",en:"Forget it. Just leave me out of it from now on."},
+      {speaker:"가은",text:"진짜 왜 이래. 오해라니까.",rom:"jinjja wae irae. ohaeranikka.",en:"What's gotten into you? It's a misunderstanding, I'm telling you."},
+    ], question:"재민은 왜 가은에게 화가 났어요?", questionEn:"Why is Jaemin angry at Gaeun?",
+    options:[{ko:"가은이 공을 혼자 차지했다고 생각해서",en:"He thinks Gaeun took all the credit"},{ko:"가은이 일을 안 해서",en:"Because Gaeun didn't work"},{ko:"가은이 지각해서",en:"Because Gaeun was late"}], answer:0 },
+  { title:"진심 어린 사과 · A heartfelt apology", lines:[
+      {speaker:"승호",text:"그때 그렇게 말해서 정말 미안해.",rom:"geuttae geureoke malhaeseo jeongmal mianhae.",en:"I'm really sorry for saying that back then."},
+      {speaker:"다인",text:"됐어. 이제 와서 무슨 소용이야.",rom:"dwaesseo. ije waseo museun soyong-iya.",en:"Forget it. What's the point now?"},
+      {speaker:"승호",text:"내가 잘못했어. 한 번만 용서해줘.",rom:"naega jalmotaesseo. han beonman yongseohaejwo.",en:"I was wrong. Please forgive me just once."},
+      {speaker:"다인",text:"...알았어. 근데 다신 그러지 마.",rom:"...arasseo. geunde dasin geureoji ma.",en:"...Fine. But don't ever do that again."},
+    ], question:"다인은 결국 어떻게 했어요?", questionEn:"What did Dain do in the end?",
+    options:[{ko:"끝까지 화를 냈어요",en:"Stayed angry to the end"},{ko:"용서해 줬어요",en:"Forgave him"},{ko:"그냥 떠났어요",en:"Just left"}], answer:1 },
+  { title:"좋은 소식 · Exciting good news", lines:[
+      {speaker:"채원",text:"야야야! 나 합격했어! 대박이지?",rom:"yayaya! na hapgyeokaesseo! daebagiji?",en:"Hey hey hey! I got in! Isn't that insane?"},
+      {speaker:"준",text:"헐, 진짜? 거기 엄청 어렵다며!",rom:"heol, jinjja? geogi eomcheong eoryeopdamyeo!",en:"Whoa, really? I heard that place is super hard!"},
+      {speaker:"채원",text:"응! 나도 안 믿겨. 너무 기뻐.",rom:"eung! nado an mitgyeo. neomu gippeo.",en:"Yeah! I can't believe it either. I'm so happy."},
+      {speaker:"준",text:"축하해! 오늘 내가 쏠게!",rom:"chukahae! oneul naega ssolge!",en:"Congrats! It's on me today!"},
+    ], question:"채원에게 무슨 일이 있었어요?", questionEn:"What happened to Chaewon?",
+    options:[{ko:"시험에 떨어졌어요",en:"She failed an exam"},{ko:"합격했어요",en:"She got accepted"},{ko:"돈을 잃었어요",en:"She lost money"}], answer:1 },
+  { title:"긴장된 통화 · A tense phone call", lines:[
+      {speaker:"민호",text:"여보세요? 너 지금 어디야. 왜 안 와.",rom:"yeoboseyo? neo jigeum eodiya. wae an wa.",en:"Hello? Where are you right now? Why aren't you here?"},
+      {speaker:"세아",text:"못 가. 미안... 지금 설명할 수가 없어.",rom:"mot ga. mian... jigeum seolmyeonghal suga eopseo.",en:"I can't come. Sorry... I can't explain right now."},
+      {speaker:"민호",text:"무슨 일이야? 목소리가 왜 그래.",rom:"museun iriya? moksoriga wae geurae.",en:"What's going on? Why does your voice sound like that?"},
+      {speaker:"세아",text:"끊을게. 나중에 연락할게.",rom:"kkeuneulge. najunge yeollakalge.",en:"I'm hanging up. I'll contact you later."},
+    ], question:"세아는 통화에서 어떤 상태였어요?", questionEn:"What was Sea's state during the call?",
+    options:[{ko:"기분이 아주 좋았어요",en:"She was in a great mood"},{ko:"뭔가 문제가 있어 보였어요",en:"She seemed like something was wrong"},{ko:"화가 많이 났어요",en:"She was very angry"}], answer:1 },
+  { title:"이별 · A goodbye scene", lines:[
+      {speaker:"하준",text:"진짜 가는 거야? 다시 안 올 거야?",rom:"jinjja ganeun geoya? dasi an ol geoya?",en:"Are you really leaving? You won't come back?"},
+      {speaker:"유나",text:"응... 이게 마지막이야. 잘 지내.",rom:"eung... ige majimagiya. jal jinae.",en:"Yeah... this is the last time. Take care."},
+      {speaker:"하준",text:"가지 마. 한 번만 더 생각해줘.",rom:"gaji ma. han beonman deo saenggakaejwo.",en:"Don't go. Please think it over one more time."},
+      {speaker:"유나",text:"미안해. 행복해야 돼, 알았지?",rom:"mianhae. haengbokaeya dwae, aratji?",en:"I'm sorry. You have to be happy, okay?"},
+    ], question:"유나는 무엇을 하려고 해요?", questionEn:"What is Yuna about to do?",
+    options:[{ko:"떠나려고 해요",en:"She's about to leave"},{ko:"고백하려고 해요",en:"She's about to confess"},{ko:"화해하려고 해요",en:"She's about to make up"}], answer:0 },
 ];

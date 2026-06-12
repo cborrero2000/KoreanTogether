@@ -6,6 +6,7 @@
     "@expo/metro-runtime": "~56.0.13",
     "expo": "~56.0.7",
     "expo-speech": "~56.0.3",
+    "expo-speech-recognition": "^56.0.1",
     "expo-status-bar": "~56.0.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",

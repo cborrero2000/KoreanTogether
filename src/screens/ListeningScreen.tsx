@@ -42,7 +42,7 @@ export function ListeningScreen({ onBack }: { onBack: () => void }) {
     return (
       <Screen>
         <ActivityHeader title="듣기 Listen & Choose" onBack={onBack} />
-        <DoneCard score={score} total={listening.length} onRestart={restart} onBack={onBack} />
+        <DoneCard score={score} total={listening.length} onRestart={restart} onBack={onBack} mode="listening" modeLabel="듣기 Listen & Choose" />
       </Screen>
     );
   }

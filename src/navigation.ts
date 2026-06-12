@@ -2,8 +2,10 @@ export type ScreenName =
   | "home"
   | "hangul"
   | "vocab"
+  | "casual"
   | "listening"
   | "speaking"
+  | "shadowing"
   | "dialog"
   | "talkback"
   | "scenes"
@@ -11,4 +13,5 @@ export type ScreenName =
   | "build"
   | "recall"
   | "exposure"
+  | "stats"
   | "settings";

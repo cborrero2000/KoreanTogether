@@ -38,7 +38,7 @@ export function SceneScreen({ onBack }: { onBack: () => void }) {
     return (
       <Screen>
         <ActivityHeader title="장면 Watch & Decide" onBack={onBack} />
-        <DoneCard score={score} total={scenes.length} onRestart={restart} onBack={onBack} />
+        <DoneCard score={score} total={scenes.length} onRestart={restart} onBack={onBack} mode="scenes" modeLabel="장면 Watch & Decide" />
       </Screen>
     );
   }

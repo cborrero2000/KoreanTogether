@@ -7,12 +7,12 @@ import {
   speak, stopSpeaking, isRecognitionAvailable,
   startRecognition, RecognitionHandle, matchScore,
 } from "../speech/speech";
-import { speaking } from "../data/content";
+import { shadowItems } from "../data/shadowing";
 import { colors, font, spacing } from "../theme";
 
 const PASS = 0.6;
 
-export function SpeakingScreen({ onBack }: { onBack: () => void }) {
+export function ShadowingScreen({ onBack }: { onBack: () => void }) {
   const [i, setI] = useState(0);
   const [listening, setListening] = useState(false);
   const [heard, setHeard] = useState("");
@@ -23,16 +23,18 @@ export function SpeakingScreen({ onBack }: { onBack: () => void }) {
   const recRef = useRef<RecognitionHandle | null>(null);
   const supported = isRecognitionAvailable();
 
-  const item = speaking[i];
+  const item = shadowItems[i];
   const passed = score != null && score >= PASS;
+  const close = score != null && score >= 0.4 && score < PASS;
 
-  useEffect(() => () => stopRec(), []);
+  useEffect(() => () => { stopRec(); stopSpeaking(); }, []);
 
   function stopRec() {
     recRef.current?.stop();
     recRef.current = null;
     setListening(false);
   }
+
   function startListening() {
     setHeard(""); setScore(null);
     const handle = startRecognition({
@@ -44,14 +46,22 @@ export function SpeakingScreen({ onBack }: { onBack: () => void }) {
     recRef.current = handle;
     setListening(true);
   }
+
   function finish(transcript: string) {
     const s = matchScore(item.ko, transcript);
     setScore(s);
     if (s >= PASS) setPasses((p) => p + 1);
     stopRec();
   }
+
+  /** Play the line, then immediately listen for the user's echo. */
+  function shadow() {
+    setHeard(""); setScore(null);
+    speak(item.ko, { onDone: () => { if (supported) startListening(); } });
+  }
+
   function advance() {
-    if (i + 1 >= speaking.length) setDone(true);
+    if (i + 1 >= shadowItems.length) setDone(true);
     else { setI(i + 1); setHeard(""); setScore(null); setShowEn(false); }
   }
   function restart() {
@@ -62,24 +72,26 @@ export function SpeakingScreen({ onBack }: { onBack: () => void }) {
   if (done) {
     return (
       <Screen>
-        <ActivityHeader title="말하기 Say It" onBack={onBack} />
-        <DoneCard score={passes} total={speaking.length} onRestart={restart} onBack={onBack} mode="speaking" modeLabel="말하기 Say It" />
+        <ActivityHeader title="쉐도잉 Shadowing" onBack={onBack} />
+        <DoneCard score={passes} total={shadowItems.length} onRestart={restart} onBack={onBack} mode="shadowing" modeLabel="쉐도잉 Shadowing" />
       </Screen>
     );
   }
 
-  const close = score != null && score >= 0.4 && score < PASS;
-
   return (
     <Screen>
-      <ActivityHeader title="말하기 Say It" onBack={onBack} step={i + 1} total={speaking.length} />
+      <ActivityHeader title="쉐도잉 Shadowing" onBack={onBack} step={i + 1} total={shadowItems.length} />
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingBottom: spacing.xl }}
       >
-        {/* Sentence card */}
+        <Body style={{ color: colors.onSurfaceVariant, marginTop: spacing.md }}>
+          Listen, then say it back right away — match the rhythm, not just the words.
+        </Body>
+
+        {/* Target sentence */}
         <Card style={{ marginTop: spacing.md }}>
-          <Body style={{ color: colors.onSurfaceVariant }}>이 문장을 소리 내어 읽어 보세요 · Read this aloud:</Body>
+          <Body style={{ color: colors.onSurfaceVariant }}>{item.source}</Body>
           <Text style={s.target}>{item.ko}</Text>
           <Rom style={{ fontSize: font.bodyLarge }}>{item.rom}</Rom>
           {showEn ? (
@@ -93,23 +105,32 @@ export function SpeakingScreen({ onBack }: { onBack: () => void }) {
               style={{ marginTop: spacing.sm }}
             />
           )}
-          <Button
-            title="듣기 Hear it"
-            icon="🔊"
-            variant="tonal"
-            onPress={() => speak(item.ko)}
-            style={{ marginTop: spacing.md }}
-          />
+          <View style={s.btnRow}>
+            <Button
+              title="듣기 Listen"
+              icon="🔊"
+              variant="tonal"
+              onPress={() => speak(item.ko)}
+              style={{ flex: 1, marginRight: spacing.sm }}
+            />
+            <Button
+              title="천천히 Slower"
+              icon="🐢"
+              variant="tonal"
+              onPress={() => speak(item.ko, { rate: 0.55 })}
+              style={{ flex: 1, marginLeft: spacing.sm }}
+            />
+          </View>
         </Card>
 
-        {/* Mic or fallback */}
+        {/* Shadow button + result */}
         {supported ? (
           <>
             <Button
-              title={listening ? "듣는 중… 탭하면 멈춤" : "탭하고 말하기 · Tap and speak"}
-              icon={listening ? "🔴" : "🎤"}
+              title={listening ? "듣는 중… 따라 말하세요" : "🗣️ 따라 말하기 Shadow it"}
+              icon={listening ? "🔴" : "🎙️"}
               variant={listening ? "accent" : "filled"}
-              onPress={listening ? stopRec : startListening}
+              onPress={listening ? stopRec : shadow}
               style={{ marginTop: spacing.lg }}
             />
             {(heard !== "" || score != null) && (
@@ -121,8 +142,8 @@ export function SpeakingScreen({ onBack }: { onBack: () => void }) {
                     <Pill
                       tone={passed ? "good" : close ? "neutral" : "bad"}
                       text={
-                        passed ? "✓ 잘했어요! Great!"
-                        : close ? "거의 맞았어요! Almost — try again."
+                        passed ? "✓ 좋아요! Great rhythm!"
+                        : close ? "거의 다 왔어요! Almost — try again."
                         : "다시 해 볼까요? Try again."
                       }
                     />
@@ -133,32 +154,26 @@ export function SpeakingScreen({ onBack }: { onBack: () => void }) {
           </>
         ) : (
           <Card style={{ marginTop: spacing.lg }}>
-            <Body style={{ fontWeight: "700" }}>🎤 Speaking check isn't available on this device</Body>
+            <Body style={{ fontWeight: "700" }}>🎤 Shadowing check isn't available on this device</Body>
             <Body style={{ color: colors.onSurfaceVariant, marginTop: spacing.xs }}>
-              Speech recognition needs microphone permission, or isn't supported here. For now, tap "Hear it", repeat, then compare.
+              Speech recognition needs microphone permission, or isn't supported here. Tap "Listen", then shadow it out loud anyway.
             </Body>
           </Card>
         )}
 
-        {passed ? (
+        <View style={s.navRow}>
           <Button
-            title={i + 1 >= speaking.length ? "끝내기 Finish" : "다음 Next ›"}
+            title="건너뛰기 Skip"
+            variant="outlined"
             onPress={advance}
-            style={{ marginTop: spacing.lg }}
+            style={{ flex: 1, marginRight: spacing.sm }}
           />
-        ) : (
-          <>
-            <Button
-              title={i + 1 >= speaking.length ? "건너뛰고 끝내기 Skip & finish" : "건너뛰기 Skip"}
-              variant="outlined"
-              onPress={advance}
-              style={{ marginTop: spacing.lg }}
-            />
-            <Body style={{ color: colors.onSurfaceVariant, textAlign: "center", marginTop: spacing.sm }}>
-              Say it correctly to unlock Next, or Skip to continue.
-            </Body>
-          </>
-        )}
+          <Button
+            title={i + 1 >= shadowItems.length ? "끝내기 Finish" : "다음 Next ›"}
+            onPress={advance}
+            style={{ flex: 1, marginLeft: spacing.sm }}
+          />
+        </View>
       </ScrollView>
     </Screen>
   );
@@ -177,5 +192,13 @@ const s = StyleSheet.create({
     fontStyle: "italic",
     color: colors.onSurface,
     marginTop: spacing.xxs,
+  },
+  btnRow: {
+    flexDirection: "row",
+    marginTop: spacing.md,
+  },
+  navRow: {
+    flexDirection: "row",
+    marginTop: spacing.lg,
   },
 });

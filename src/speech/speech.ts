@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 import * as Speech from "expo-speech";
+import { ExpoSpeechRecognitionModule } from "expo-speech-recognition";
 
 /* ================================================================== */
 /*  TEXT TO SPEECH  (Korean)                                          */
@@ -128,6 +129,13 @@ export async function initSpeech(): Promise<void> {
   } catch {}
   if (Platform.OS === "web") await loadWebVoices();
   else await loadNativeVoices();
+  // Ask for mic/speech permission up front so Say It / Talk Back can start
+  // recognition immediately the first time the user taps the mic.
+  if (Platform.OS !== "web") {
+    try {
+      await ExpoSpeechRecognitionModule.requestPermissionsAsync();
+    } catch {}
+  }
   ready = true;
 }
 
@@ -264,14 +272,21 @@ export function stopSpeaking() {
 }
 
 /* ================================================================== */
-/*  SPEECH TO TEXT  (browser Web Speech API; native falls back to       */
-/*  typed input in the screens that use it)                            */
+/*  SPEECH TO TEXT                                                      */
+/*  Web: browser Web Speech API. Native (iOS/Android): on-device/      */
+/*  system speech recognizer via expo-speech-recognition.              */
 /* ================================================================== */
 
 export function isRecognitionAvailable(): boolean {
-  if (Platform.OS !== "web") return false;
-  const w = globalThis as any;
-  return !!(w.SpeechRecognition || w.webkitSpeechRecognition);
+  if (Platform.OS === "web") {
+    const w = globalThis as any;
+    return !!(w.SpeechRecognition || w.webkitSpeechRecognition);
+  }
+  try {
+    return ExpoSpeechRecognitionModule.isRecognitionAvailable();
+  } catch {
+    return false;
+  }
 }
 
 export type RecognitionHandle = { stop: () => void };
@@ -282,6 +297,14 @@ export function startRecognition(handlers: {
   onEnd?: () => void;
 }): RecognitionHandle | null {
   if (!isRecognitionAvailable()) return null;
+  return Platform.OS === "web" ? startRecognitionWeb(handlers) : startRecognitionNative(handlers);
+}
+
+function startRecognitionWeb(handlers: {
+  onResult: (transcript: string, isFinal: boolean) => void;
+  onError?: (message: string) => void;
+  onEnd?: () => void;
+}): RecognitionHandle | null {
   const w = globalThis as any;
   const Ctor = w.SpeechRecognition || w.webkitSpeechRecognition;
   const rec = new Ctor();
@@ -308,6 +331,64 @@ export function startRecognition(handlers: {
     return null;
   }
   return { stop: () => rec.stop() };
+}
+
+function startRecognitionNative(handlers: {
+  onResult: (transcript: string, isFinal: boolean) => void;
+  onError?: (message: string) => void;
+  onEnd?: () => void;
+}): RecognitionHandle | null {
+  const subs: { remove: () => void }[] = [];
+  let ended = false;
+
+  const cleanup = () => {
+    subs.forEach((s) => s.remove());
+    subs.length = 0;
+  };
+
+  subs.push(
+    ExpoSpeechRecognitionModule.addListener("result", (event) => {
+      const result = event.results?.[0];
+      if (!result) return;
+      handlers.onResult(result.transcript.trim(), !!event.isFinal);
+    })
+  );
+  subs.push(
+    ExpoSpeechRecognitionModule.addListener("error", (event) => {
+      handlers.onError?.(event.message || event.error);
+    })
+  );
+  subs.push(
+    ExpoSpeechRecognitionModule.addListener("end", () => {
+      if (ended) return;
+      ended = true;
+      cleanup();
+      handlers.onEnd?.();
+    })
+  );
+
+  try {
+    ExpoSpeechRecognitionModule.start({
+      lang: LANG,
+      interimResults: true,
+      continuous: false,
+    });
+  } catch {
+    cleanup();
+    return null;
+  }
+
+  return {
+    stop: () => {
+      if (!ended) {
+        ended = true;
+        cleanup();
+      }
+      try {
+        ExpoSpeechRecognitionModule.stop();
+      } catch {}
+    },
+  };
 }
 
 /* ================================================================== */

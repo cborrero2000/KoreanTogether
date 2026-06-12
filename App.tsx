@@ -7,8 +7,10 @@ import { ScreenName } from "./src/navigation";
 import { HomeScreen } from "./src/screens/HomeScreen";
 import { HangulScreen } from "./src/screens/HangulScreen";
 import { VocabScreen } from "./src/screens/VocabScreen";
+import { CasualScreen } from "./src/screens/CasualScreen";
 import { ListeningScreen } from "./src/screens/ListeningScreen";
 import { SpeakingScreen } from "./src/screens/SpeakingScreen";
+import { ShadowingScreen } from "./src/screens/ShadowingScreen";
 import { DialogScreen } from "./src/screens/DialogScreen";
 import { TalkBackScreen } from "./src/screens/TalkBackScreen";
 import { SceneScreen } from "./src/screens/SceneScreen";
@@ -16,6 +18,7 @@ import { ListenPracticeScreen } from "./src/screens/ListenPracticeScreen";
 import { BuildScreen } from "./src/screens/BuildScreen";
 import { RecallScreen } from "./src/screens/RecallScreen";
 import { ExposureScreen } from "./src/screens/ExposureScreen";
+import { StatsScreen } from "./src/screens/StatsScreen";
 import { SettingsScreen } from "./src/screens/SettingsScreen";
 import { initSpeech, stopSpeaking } from "./src/speech/speech";
 
@@ -40,8 +43,10 @@ export default function App() {
         {screen === "home" && <HomeScreen go={go} />}
         {screen === "hangul" && <HangulScreen onBack={back} />}
         {screen === "vocab" && <VocabScreen onBack={back} />}
+        {screen === "casual" && <CasualScreen onBack={back} />}
         {screen === "listening" && <ListeningScreen onBack={back} />}
         {screen === "speaking" && <SpeakingScreen onBack={back} />}
+        {screen === "shadowing" && <ShadowingScreen onBack={back} />}
         {screen === "dialog" && <DialogScreen onBack={back} />}
         {screen === "talkback" && <TalkBackScreen onBack={back} />}
         {screen === "scenes" && <SceneScreen onBack={back} />}
@@ -49,6 +54,7 @@ export default function App() {
         {screen === "build" && <BuildScreen onBack={back} />}
         {screen === "recall" && <RecallScreen onBack={back} />}
         {screen === "exposure" && <ExposureScreen onBack={back} />}
+        {screen === "stats" && <StatsScreen onBack={back} />}
         {screen === "settings" && <SettingsScreen onBack={back} />}
       </SafeAreaView>
     </SafeAreaProvider>

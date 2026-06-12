@@ -1,19 +1,33 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { StyleSheet, Text } from "react-native";
 import { Card, H2, Body, Button } from "./UI";
 import { colors, font, spacing } from "../theme";
+import { recordSession } from "../stats";
 
 export function DoneCard({
   score,
   total,
   onRestart,
   onBack,
+  mode,
+  modeLabel,
 }: {
   score: number;
   total: number;
   onRestart: () => void;
   onBack: () => void;
+  /** Stable key for progress tracking, e.g. "vocab", "speaking". Omit to skip tracking. */
+  mode?: string;
+  /** Display label for the Progress screen, e.g. "단어 Vocabulary". */
+  modeLabel?: string;
 }) {
+  const recorded = useRef(false);
+  useEffect(() => {
+    if (recorded.current || !mode) return;
+    recorded.current = true;
+    recordSession(mode, modeLabel ?? mode, score, total);
+  }, [mode, modeLabel, score, total]);
+
   const pct = total > 0 ? Math.round((score / total) * 100) : 0;
   const great = pct >= 80;
   const ok    = pct >= 50;

@@ -132,7 +132,7 @@ function HangulQuiz({ onBack, onExit }: { onBack: () => void; onExit: () => void
     return (
       <Screen>
         <ActivityHeader title="한글 퀴즈 Quiz" onBack={onExit} />
-        <DoneCard score={score} total={pool.length} onRestart={restart} onBack={onExit} />
+        <DoneCard score={score} total={pool.length} onRestart={restart} onBack={onExit} mode="hangul" modeLabel="한글 Hangul" />
       </Screen>
     );
   }

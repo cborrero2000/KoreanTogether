@@ -22,6 +22,13 @@ export function HomeScreen({ go }: { go: (s: ScreenName) => void }) {
       ],
     },
     {
+      heading: "반말 · Casual Speech",
+      sub: "Drama Korean",
+      tiles: [
+        { key: "casual", icon: "💬", title: "Casual Speech · 반말", desc: "Formal vs. casual — the Korean dramas actually use." },
+      ],
+    },
+    {
       heading: "듣기 · Listen",
       sub: "Most important",
       tiles: [
@@ -36,6 +43,7 @@ export function HomeScreen({ go }: { go: (s: ScreenName) => void }) {
       sub: "",
       tiles: [
         { key: "speaking",  icon: "🎤", title: "Say It · 말하기",           desc: "Read it aloud — your speaking is checked." },
+        { key: "shadowing", icon: "🗣️", title: "Shadowing · 쉐도잉",       desc: "Hear it, then echo it back instantly." },
         { key: "talkback",  icon: "🔁", title: "Talk Back · 대화 연습",     desc: "Have a real conversation. Reply out loud." },
       ],
     },
@@ -52,6 +60,7 @@ export function HomeScreen({ go }: { go: (s: ScreenName) => void }) {
       tiles: [
         { key: "recall",   icon: "🧠", title: "Recall · 기억하기",       desc: "Spaced review — recall before you forget.", badge: due || undefined },
         { key: "exposure", icon: "🔂", title: "Exposure · 노출 유지",    desc: "Hands-free playlist to keep it all warm." },
+        { key: "stats",    icon: "📊", title: "Progress · 진행 상황",    desc: "Streaks, accuracy, and how much you've practiced." },
       ],
     },
   ];
