@@ -72,7 +72,7 @@ export function DialogScreen({ onBack }: { onBack: () => void }) {
           {/* Control row — separate rows to avoid overflow on narrow screens */}
           <View style={s.ctrlRow}>
             <Button title="대화 듣기 Play" icon="🔊" onPress={() => player.play()} style={{ flex: 1, marginRight: spacing.xs }} />
-            <Button title="천천히" icon="🐢" variant="tonal" onPress={() => player.play(0.6)} style={{ flex: 1, marginLeft: spacing.xs }} />
+            <Button title="천천히" icon="🐢" iconSize={font.headlineLarge} variant="tonal" onPress={() => player.play(0.6)} style={{ flex: 1, marginLeft: spacing.xs }} />
           </View>
           <Button
             title={showEn ? "번역 숨기기 Hide" : "뜻 보기 Translation 🌐"}

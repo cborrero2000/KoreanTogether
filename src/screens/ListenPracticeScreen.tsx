@@ -65,7 +65,7 @@ export function ListenPracticeScreen({ onBack }: { onBack: () => void }) {
           </Text>
           <View style={s.btnRow}>
             <Button title="듣기 Play" icon="▶️" onPress={() => player.play()} style={{ flex: 1, marginRight: spacing.sm }} />
-            <Button title="천천히 Slower" icon="🐢" variant="tonal" onPress={() => player.play(0.55)} style={{ flex: 1, marginLeft: spacing.sm }} />
+            <Button title="천천히 Slower" icon="🐢" iconSize={font.headlineLarge} variant="tonal" onPress={() => player.play(0.55)} style={{ flex: 1, marginLeft: spacing.sm }} />
           </View>
         </Card>
 

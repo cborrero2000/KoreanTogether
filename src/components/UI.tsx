@@ -95,6 +95,7 @@ export function Button({
   disabled,
   loading,
   icon,
+  iconSize,
   style,
   accessibilityLabel,
 }: {
@@ -104,6 +105,8 @@ export function Button({
   disabled?: boolean;
   loading?: boolean;
   icon?: string;
+  /** Override the icon's font size — e.g. to make one button's icon stand out (turtle on "Slower") without resizing the button. */
+  iconSize?: number;
   style?: ViewStyle;
   accessibilityLabel?: string;
 }) {
@@ -131,7 +134,11 @@ export function Button({
         <ActivityIndicator color={fg} />
       ) : (
         <>
-          {icon ? <Text style={[s.btnIcon, { color: fg }]}>{icon}</Text> : null}
+          {icon ? (
+            <Text style={[s.btnIcon, { color: fg }, iconSize ? { fontSize: iconSize } : null]}>
+              {icon}
+            </Text>
+          ) : null}
           <Text style={[s.btnText, { color: fg }]}>{title}</Text>
         </>
       )}

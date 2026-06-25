@@ -5,7 +5,7 @@ import { ActivityHeader } from "../components/ActivityHeader";
 import { DoneCard } from "../components/DoneCard";
 import { speak, stopSpeaking } from "../speech/speech";
 import { listening } from "../data/content";
-import { colors, spacing } from "../theme";
+import { colors, font, spacing } from "../theme";
 import { shuffle } from "../util";
 
 export function ListeningScreen({ onBack }: { onBack: () => void }) {
@@ -67,6 +67,7 @@ export function ListeningScreen({ onBack }: { onBack: () => void }) {
           <Button
             title="천천히 Slower"
             icon="🐢"
+            iconSize={font.headlineLarge}
             variant="tonal"
             onPress={() => speak(item.say, { rate: 0.6 })}
             style={{ marginTop: spacing.sm, alignSelf: "stretch" }}

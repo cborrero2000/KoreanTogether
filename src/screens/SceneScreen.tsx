@@ -87,7 +87,7 @@ export function SceneScreen({ onBack }: { onBack: () => void }) {
         {/* ── Controls ── */}
         <View style={s.btnRow}>
           <Button title="장면 보기 Play" icon="▶️" onPress={() => player.play()} style={{ flex: 1, marginRight: spacing.xs }} />
-          <Button title="천천히" icon="🐢" variant="tonal" onPress={() => player.play(0.6)} style={{ flex: 0.8, marginHorizontal: spacing.xs }} />
+          <Button title="천천히" icon="🐢" iconSize={font.headlineLarge} variant="tonal" onPress={() => player.play(0.6)} style={{ flex: 0.8, marginHorizontal: spacing.xs }} />
           <Button title={showEn ? "Hide 🌐" : "자막 🌐"} variant="outlined" onPress={() => setShowEn((v) => !v)} style={{ flex: 0.7, marginLeft: spacing.xs }} />
         </View>
 

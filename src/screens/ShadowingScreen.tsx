@@ -116,6 +116,7 @@ export function ShadowingScreen({ onBack }: { onBack: () => void }) {
             <Button
               title="천천히 Slower"
               icon="🐢"
+              iconSize={font.headlineLarge}
               variant="tonal"
               onPress={() => speak(item.ko, { rate: 0.55 })}
               style={{ flex: 1, marginLeft: spacing.sm }}
