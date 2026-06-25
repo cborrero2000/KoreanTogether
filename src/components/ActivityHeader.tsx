@@ -23,7 +23,8 @@ export function ActivityHeader({
           accessibilityLabel="Back to menu"
           style={({ pressed }) => [s.back, pressed && { opacity: 0.8 }]}
         >
-          <Text style={s.backText}>‹ 메뉴 Menu</Text>
+          <View style={s.backArrow} />
+          <Text style={s.backText}>메뉴 Menu</Text>
         </Pressable>
         {step != null && total != null && (
           <Text style={s.progress} accessibilityLabel={`Step ${step} of ${total}`}>
@@ -59,8 +60,18 @@ const s = StyleSheet.create({
     borderRadius: shape.full,
     minHeight: MIN_TOUCH,
     minWidth: MIN_TOUCH,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+  },
+  backArrow: {
+    width: 14,
+    height: 14,
+    borderRightWidth: 3,
+    borderBottomWidth: 3,
+    borderColor: colors.onSurface,
+    transform: [{ rotate: "135deg" }],
+    marginRight: spacing.sm,
   },
   backText: {
     fontSize: font.labelLarge,
