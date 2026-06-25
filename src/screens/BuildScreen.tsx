@@ -190,7 +190,7 @@ const s = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  chipText: { fontSize: font.bodyLarge, fontWeight: "700", color: colors.primary },
+  chipText: { fontSize: font.bodyXL, fontWeight: "700", color: colors.primary },
   chipPicked: {
     backgroundColor: colors.primary,
     borderRadius: shape.full,
@@ -202,7 +202,7 @@ const s = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  chipPickedText: { fontSize: font.bodyLarge, fontWeight: "700", color: colors.onPrimary },
+  chipPickedText: { fontSize: font.bodyXL, fontWeight: "700", color: colors.onPrimary },
   solution: {
     fontSize: font.titleLarge,
     fontWeight: "800",

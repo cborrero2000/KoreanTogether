@@ -182,6 +182,7 @@ export const font = {
   get titleMedium() { return scaledFont(16); },
   get titleSmall()  { return scaledFont(14); },
   // Body
+  get bodyXL()      { return scaledFont(19); },
   get bodyLarge()   { return scaledFont(16); },
   get bodyMedium()  { return scaledFont(14); },
   // Label

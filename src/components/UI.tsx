@@ -130,10 +130,10 @@ export function Button({
       {loading ? (
         <ActivityIndicator color={fg} />
       ) : (
-        <Text style={[s.btnText, { color: fg }]}>
-          {icon ? `${icon}  ` : ""}
-          {title}
-        </Text>
+        <>
+          {icon ? <Text style={[s.btnIcon, { color: fg }]}>{icon}</Text> : null}
+          <Text style={[s.btnText, { color: fg }]}>{title}</Text>
+        </>
       )}
     </Pressable>
   );
@@ -267,16 +267,21 @@ const s = StyleSheet.create({
   },
 
   btn: {
-    minHeight: MIN_TOUCH,
+    minHeight: MIN_TOUCH + 8,
     borderRadius: shape.full,
     paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.xs,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
   },
+  btnIcon: {
+    fontSize: font.headlineSmall,
+    marginRight: spacing.xs,
+  },
   btnText: {
-    fontSize: font.titleMedium,
-    fontWeight: "700",
+    fontSize: font.titleLarge,
+    fontWeight: "800",
     letterSpacing: 0.1,
   },
 
@@ -292,7 +297,7 @@ const s = StyleSheet.create({
     justifyContent: "space-between",
   },
   choiceText: {
-    fontSize: font.bodyLarge,
+    fontSize: font.bodyXL,
     color: colors.onSurface,
     fontWeight: "600",
     flex: 1,
@@ -303,7 +308,7 @@ const s = StyleSheet.create({
     marginTop: spacing.xxs,
   },
   mark: {
-    fontSize: font.headlineSmall,
+    fontSize: font.headlineMedium,
     fontWeight: "900",
     marginLeft: spacing.sm,
   },

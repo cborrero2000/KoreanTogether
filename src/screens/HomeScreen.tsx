@@ -162,7 +162,7 @@ const s = StyleSheet.create({
     letterSpacing: 0.8,
   },
   sectionSub: {
-    fontSize: font.labelMedium,
+    fontSize: font.bodyMedium,
     color: colors.primary,
     fontWeight: "700",
   },
@@ -190,15 +190,15 @@ const s = StyleSheet.create({
   tileWide: { width: "48.8%" },
 
   tileIcon: {
-    fontSize: font.icon,
+    fontSize: font.emojiMd,
     marginRight: spacing.md,
     fontWeight: "800",
     color: colors.primary,
-    width: 44,
+    width: 52,
     textAlign: "center",
   },
-  tileTitle: { fontSize: font.titleMedium, fontWeight: "800", color: colors.onSurface },
-  tileDesc:  { fontSize: font.labelMedium, color: colors.onSurfaceVariant, marginTop: spacing.xxs },
+  tileTitle: { fontSize: font.titleLarge, fontWeight: "800", color: colors.onSurface },
+  tileDesc:  { fontSize: font.bodyMedium, fontWeight: "600", color: colors.secondary, marginTop: spacing.xxs },
 
   chevron: { fontSize: 28, color: colors.onSurfaceVariant, marginLeft: spacing.sm },
 
