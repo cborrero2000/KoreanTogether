@@ -54,8 +54,8 @@ export function ListeningScreen({ onBack }: { onBack: () => void }) {
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingBottom: spacing.xl }}
       >
-        <Card style={{ marginTop: spacing.md, alignItems: "center" }}>
-          <Body style={{ color: colors.onSurfaceVariant, textAlign: "center" }}>
+        <Card style={{ marginTop: spacing.md, alignItems: "center", backgroundColor: colors.secondaryContainer }}>
+          <Body style={{ color: colors.onSecondaryContainer, fontWeight: "700", textAlign: "center" }}>
             Listen carefully, then choose the sentence you heard.
           </Body>
           <Button
