@@ -19,6 +19,7 @@ export function HomeScreen({ go }: { go: (s: ScreenName) => void }) {
       tiles: [
         { key: "hangul",  icon: "가", title: "Hangul · 한글",      desc: "Learn the alphabet and its sounds." },
         { key: "vocab",   icon: "📖", title: "Vocabulary · 단어",  desc: "Words alone, then in a sentence + picture." },
+        { key: "masterlist", icon: "📋", title: "Master List · 표현 목록", desc: "Your 29 conversation phrases — play them, then say them." },
       ],
     },
     {

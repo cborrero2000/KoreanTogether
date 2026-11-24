@@ -103,6 +103,10 @@ async function loadNativeVoices() {
     let s = 0;
     if (v.quality === Speech.VoiceQuality.Enhanced) s += 100;
     if (NEURAL.test(v.name || "") || NEURAL.test(v.identifier || "")) s += 120;
+    // Android Google TTS: "-network" voices are the neural, human-sounding
+    // ones; "-local" are the older offline voices. Prefer network.
+    if (/network/i.test(v.identifier || "")) s += 150;
+    if (/local/i.test(v.identifier || "")) s -= 20;
     if (NICE.test(v.name || "")) s += 30;
     return s;
   };
@@ -153,7 +157,10 @@ export function listVoices(): VoiceInfo[] {
       id: v.identifier,
       name: v.name || v.identifier,
       lang: v.language || "ko-KR",
-      natural: v.quality === Speech.VoiceQuality.Enhanced || NEURAL.test(v.name || ""),
+      natural:
+        v.quality === Speech.VoiceQuality.Enhanced ||
+        NEURAL.test(v.name || "") ||
+        /network/i.test(v.identifier || ""),
     }))
     .sort((a, b) => Number(b.natural) - Number(a.natural) || a.name.localeCompare(b.name));
 }
@@ -206,7 +213,7 @@ export type SpeakOpts = {
 // two people in a dialog don't sound identical.
 function pitchFor(which: "a" | "b" | undefined, sameVoice: boolean): number {
   if (which === "b") return sameVoice ? 0.82 : 0.9;
-  return 1.04;
+  return 1.0; // natural pitch for the main voice — no pitch-shifting
 }
 
 export function speak(text: string, opts?: SpeakOpts) {

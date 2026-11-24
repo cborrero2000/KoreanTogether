@@ -2,6 +2,7 @@ export type ScreenName =
   | "home"
   | "hangul"
   | "vocab"
+  | "masterlist"
   | "casual"
   | "listening"
   | "speaking"
