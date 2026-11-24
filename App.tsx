@@ -22,13 +22,22 @@ import { ExposureScreen } from "./src/screens/ExposureScreen";
 import { StatsScreen } from "./src/screens/StatsScreen";
 import { SettingsScreen } from "./src/screens/SettingsScreen";
 import { initSpeech, stopSpeaking } from "./src/speech/speech";
+import { hydrateStorage } from "./src/storage";
 
 export default function App() {
   const [screen, setScreen] = useState<ScreenName>("home");
+  // Wait for saved data (voice, progress) to load from the device before
+  // showing any screen, so nothing reads empty defaults first.
+  const [loaded, setLoaded] = useState(false);
 
-  // Load the available device voices once, and pick the most natural one.
+  // Load saved data, then the available device voices (pick the most natural).
   useEffect(() => {
-    initSpeech();
+    hydrateStorage()
+      .catch(() => {})
+      .then(() => {
+        setLoaded(true);
+        return initSpeech();
+      });
   }, []);
 
   function go(s: ScreenName) {
@@ -41,7 +50,7 @@ export default function App() {
     <SafeAreaProvider>
       <SafeAreaView style={styles.root} edges={["top", "left", "right", "bottom"]}>
         <StatusBar style="dark" />
-        {screen === "home" && <HomeScreen go={go} />}
+        {loaded && screen === "home" && <HomeScreen go={go} />}
         {screen === "hangul" && <HangulScreen onBack={back} />}
         {screen === "vocab" && <VocabScreen onBack={back} />}
         {screen === "casual" && <CasualScreen onBack={back} />}

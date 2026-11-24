@@ -1,6 +1,7 @@
 import { Platform } from "react-native";
 import * as Speech from "expo-speech";
 import { ExpoSpeechRecognitionModule } from "expo-speech-recognition";
+import { getItem, setItem, removeItem } from "../storage";
 
 /* ================================================================== */
 /*  TEXT TO SPEECH  (Korean)                                          */
@@ -125,12 +126,8 @@ async function loadNativeVoices() {
 
 export async function initSpeech(): Promise<void> {
   if (ready) return;
-  // restore saved choice (web only — localStorage)
-  try {
-    if (Platform.OS === "web") {
-      userVoiceId = (globalThis as any).localStorage?.getItem("kt_voice") || null;
-    }
-  } catch {}
+  // restore the saved voice choice (web localStorage / phone file)
+  userVoiceId = getItem("kt_voice") || null;
   if (Platform.OS === "web") await loadWebVoices();
   else await loadNativeVoices();
   // Ask for mic/speech permission up front so Say It / Talk Back can start
@@ -171,13 +168,8 @@ export function getPreferredVoiceId(): string | null {
 
 export function setPreferredVoiceId(id: string | null) {
   userVoiceId = id;
-  try {
-    if (Platform.OS === "web") {
-      const ls = (globalThis as any).localStorage;
-      if (id) ls?.setItem("kt_voice", id);
-      else ls?.removeItem("kt_voice");
-    }
-  } catch {}
+  if (id) setItem("kt_voice", id);
+  else removeItem("kt_voice");
 }
 
 /** Whether this device offers at least one genuinely natural Korean voice. */
