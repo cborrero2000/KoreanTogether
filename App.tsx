@@ -9,6 +9,7 @@ import { HangulScreen } from "./src/screens/HangulScreen";
 import { VocabScreen } from "./src/screens/VocabScreen";
 import { CasualScreen } from "./src/screens/CasualScreen";
 import { MasterListScreen } from "./src/screens/MasterListScreen";
+import { GuessGameScreen } from "./src/screens/GuessGameScreen";
 import { ListeningScreen } from "./src/screens/ListeningScreen";
 import { SpeakingScreen } from "./src/screens/SpeakingScreen";
 import { ShadowingScreen } from "./src/screens/ShadowingScreen";
@@ -55,6 +56,7 @@ export default function App() {
         {screen === "vocab" && <VocabScreen onBack={back} />}
         {screen === "casual" && <CasualScreen onBack={back} />}
         {screen === "masterlist" && <MasterListScreen onBack={back} />}
+        {screen === "guess" && <GuessGameScreen onBack={back} />}
         {screen === "listening" && <ListeningScreen onBack={back} />}
         {screen === "speaking" && <SpeakingScreen onBack={back} />}
         {screen === "shadowing" && <ShadowingScreen onBack={back} />}

@@ -5,6 +5,7 @@ export type ScreenName =
   | "masterlist"
   | "casual"
   | "listening"
+  | "guess"
   | "speaking"
   | "shadowing"
   | "dialog"

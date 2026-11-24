@@ -40,6 +40,13 @@ export function HomeScreen({ go }: { go: (s: ScreenName) => void }) {
       ],
     },
     {
+      heading: "게임 · Game",
+      sub: "Test your ear",
+      tiles: [
+        { key: "guess", icon: "🎲", title: "Listening Game · 듣기 게임", desc: "Hear a random phrase, guess it, then reveal the meaning." },
+      ],
+    },
+    {
       heading: "말하기 · Speak",
       sub: "",
       tiles: [
